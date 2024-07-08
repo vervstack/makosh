@@ -1,0 +1,100 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "grpc/makosh-be_api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "makoshBeAPI"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/version": {
+      "post": {
+        "operationId": "makoshBeAPI_Version",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiPingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiPingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "makoshBeAPI"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "makosh_be_apiPingRequest": {
+      "type": "object",
+      "properties": {
+        "clientTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "makosh_be_apiPingResponse": {
+      "type": "object",
+      "properties": {
+        "took": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
