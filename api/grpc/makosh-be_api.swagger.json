@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/version": {
+    "/v1/endpoints": {
       "post": {
-        "operationId": "makoshBeAPI_Version",
+        "operationId": "makoshBeAPI_UpsertEndpoints",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/makosh_be_apiPingResponse"
+              "$ref": "#/definitions/makosh_be_apiUpsertEndpointsResponse"
             }
           },
           "default": {
@@ -39,7 +39,69 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/makosh_be_apiPingRequest"
+              "$ref": "#/definitions/makosh_be_apiUpsertEndpointsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "makoshBeAPI"
+        ]
+      }
+    },
+    "/v1/endpoints/{serviceName}": {
+      "get": {
+        "operationId": "makoshBeAPI_ListEndpoints",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiListEndpointsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "serviceName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "makoshBeAPI"
+        ]
+      }
+    },
+    "/v1/version": {
+      "post": {
+        "operationId": "makoshBeAPI_Version",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiVersionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiVersionRequest"
             }
           }
         ],
@@ -50,21 +112,54 @@
     }
   },
   "definitions": {
-    "makosh_be_apiPingRequest": {
+    "makosh_be_apiEndpoint": {
       "type": "object",
       "properties": {
-        "clientTimestamp": {
-          "type": "string",
-          "format": "date-time"
+        "serviceName": {
+          "type": "string"
+        },
+        "addrs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
-    "makosh_be_apiPingResponse": {
+    "makosh_be_apiListEndpointsResponse": {
       "type": "object",
       "properties": {
-        "took": {
-          "type": "integer",
-          "format": "int64"
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "makosh_be_apiUpsertEndpointsRequest": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/makosh_be_apiEndpoint"
+          }
+        }
+      }
+    },
+    "makosh_be_apiUpsertEndpointsResponse": {
+      "type": "object"
+    },
+    "makosh_be_apiVersionRequest": {
+      "type": "object"
+    },
+    "makosh_be_apiVersionResponse": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
         }
       }
     },

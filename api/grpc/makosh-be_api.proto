@@ -2,24 +2,61 @@ syntax = "proto3";
 
 package makosh_be_api;
 
-import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
-option go_package = "/example_api";
+option go_package = "/makosh_be";
 
 service makoshBeAPI {
-  rpc Version(PingRequest) returns (PingResponse) {
+  rpc Version(Version.Request) returns (Version.Response) {
     option (google.api.http) = {
       post: "/v1/version"
       body: "*"
     };
   };
+
+  rpc ListEndpoints(ListEndpoints.Request) returns (ListEndpoints.Response) {
+    option (google.api.http) = {
+      get: "/v1/endpoints/{service_name}"
+    };
+  };
+
+  rpc UpsertEndpoints(UpsertEndpoints.Request) returns (UpsertEndpoints.Response) {
+    option (google.api.http) = {
+      post: "/v1/endpoints"
+      body: "*"
+    };
+  }
+
 }
 
-message PingRequest {
-  google.protobuf.Timestamp client_timestamp = 1;
+message Version {
+    message Request {}
+    message Response {
+      string version = 1;
+    }
 }
 
-message PingResponse {
-   uint32 took = 1;
+
+message ListEndpoints {
+  message Request {
+    string service_name = 1;
+  }
+
+  message Response {
+    repeated string urls = 1;
+  }
+}
+
+
+message Endpoint {
+  string service_name = 1;
+  repeated string addrs = 2;
+}
+
+message UpsertEndpoints {
+  message Request {
+    repeated Endpoint endpoints = 1;
+  }
+
+  message Response {}
 }

@@ -6,25 +6,37 @@ import (
 	"os/signal"
 	"syscall"
 
+	//_transport_imports
+
+	errors "github.com/Red-Sock/trace-errors"
 	"github.com/sirupsen/logrus"
 
 	"github.com/godverv/makosh-be/internal/config"
+	"github.com/godverv/makosh-be/internal/store/in_memory"
+	"github.com/godverv/makosh-be/internal/transport/grpc"
+	"github.com/godverv/makosh-be/internal/transport/grpc/makosh"
 	"github.com/godverv/makosh-be/internal/utils/closer"
-	//_transport_imports
 )
 
 func main() {
+	err := start()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+}
+
+func start() error {
 	logrus.Println("starting app")
 
 	ctx := context.Background()
 
 	cfg, err := config.Load()
 	if err != nil {
-		logrus.Fatalf("error reading config %s", err.Error())
+		return errors.Wrap(err, "error reading config")
 	}
 
 	if cfg.GetAppInfo().StartupDuration == 0 {
-		logrus.Fatalf("no startup duration in config")
+		return errors.New("no startup duration in config")
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, cfg.GetAppInfo().StartupDuration)
@@ -33,6 +45,23 @@ func main() {
 		return nil
 	})
 
+	grpcServer, err := cfg.GetServers().GRPC(config.ServerGrpc)
+	if err != nil {
+		return errors.Wrap(err, "error getting grpc server from config")
+	}
+
+	inMemoryStore := in_memory.New()
+
+	server, err := grpc.NewServer(grpcServer, makosh.New(cfg, inMemoryStore))
+	if err != nil {
+		return errors.Wrap(err, "error initializing server")
+	}
+
+	err = server.Start(ctx)
+	if err != nil {
+		return errors.Wrap(err, "error starting server")
+	}
+
 	waitingForTheEnd()
 
 	logrus.Println("shutting down the app")
@@ -40,6 +69,8 @@ func main() {
 	if err = closer.Close(); err != nil {
 		logrus.Fatalf("errors while shutting down application %s", err.Error())
 	}
+
+	return nil
 }
 
 // rscli comment: an obligatory function for tool to work properly.
