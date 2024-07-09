@@ -11,9 +11,11 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 
 	"github.com/godverv/makosh/cmd/service/makosh"
 	"github.com/godverv/makosh/internal/domain"
+	"github.com/godverv/makosh/internal/interceptors"
 	"github.com/godverv/makosh/pkg/makosh_be"
 )
 
@@ -73,7 +75,11 @@ func startMakoshService() {
 	}()
 }
 func initEnv() {
-	ctx := context.Background()
+	md := metadata.New(map[string]string{
+		interceptors.Header: makoshSecret,
+	})
+
+	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	var err error
 	makoshClient, err = prepareMakoshClient(ctx)
 	if err != nil {
@@ -89,6 +95,7 @@ func initEnv() {
 				Addrs:       endpoint.Addrs,
 			})
 	}
+
 	_, err = makoshClient.UpsertEndpoints(ctx, upsertReq)
 	if err != nil {
 		log.Fatal(err.Error())

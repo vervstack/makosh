@@ -12,7 +12,12 @@ import (
 
 // Header - header containing auth token to talk to service
 // in order to perform REST call should pre append runtime.MetadataHeaderPrefix (e.g - "Grpc-Metadata-")
-const Header = "Makosh-Auth"
+const (
+	Header = "Makosh-Auth"
+
+	NoAuthErrMessage      = "no auth header"
+	InvalidAuthErrMessage = "invalid auth header"
+)
 
 func GrpcInterceptor(secret string) grpc.ServerOption {
 	return grpc.ChainUnaryInterceptor(
@@ -24,11 +29,11 @@ func GrpcInterceptor(secret string) grpc.ServerOption {
 
 			auth := md.Get(Header)
 			if len(auth) == 0 {
-				return nil, status.Error(codes.PermissionDenied, "no auth header")
+				return nil, status.Error(codes.PermissionDenied, NoAuthErrMessage)
 			}
 
 			if !slices.Contains(auth, secret) {
-				return nil, status.Error(codes.PermissionDenied, "invalid auth header")
+				return nil, status.Error(codes.PermissionDenied, InvalidAuthErrMessage)
 			}
 
 			return handler(ctx, req)

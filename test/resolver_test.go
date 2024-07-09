@@ -1,10 +1,13 @@
 package test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc/codes"
 
+	"github.com/godverv/makosh/internal/interceptors"
 	"github.com/godverv/makosh/pkg/makosh_resolver"
 )
 
@@ -19,6 +22,7 @@ func Test_Resolver(t *testing.T) {
 
 		getUpdaterAndResult func() (updateFunc func([]string) error, resultSlice *[]string)
 		expectedResult      []string
+		expectedErr         map[string]any
 	}
 
 	testCases := map[string]testCase{
@@ -34,6 +38,23 @@ func Test_Resolver(t *testing.T) {
 				}, resultSlice
 			},
 			expectedResult: examples[0].Addrs,
+		},
+		"INVALID_AUTH_ERROR": {
+			makoshEndPoint: httpMakoshEndpoint,
+			makoshSecret:   "fake_secret",
+			targetName:     testService1,
+			getUpdaterAndResult: func() (updateFunc func([]string) error, resultSlice *[]string) {
+				resultSlice = &[]string{}
+				return func(addrs []string) error {
+					*resultSlice = addrs
+					return nil
+				}, resultSlice
+			},
+			expectedResult: []string{},
+			expectedErr: map[string]any{
+				"code":    float64(codes.PermissionDenied),
+				"message": interceptors.InvalidAuthErrMessage,
+			},
 		},
 	}
 
@@ -51,7 +72,15 @@ func Test_Resolver(t *testing.T) {
 			require.NoError(t, err)
 
 			err = resolver.Resolve()
-			require.NoError(t, err)
+			if test.expectedErr != nil {
+				m := make(map[string]any)
+				marshErr := json.Unmarshal([]byte(err.Error()), &m)
+				require.NoError(t, marshErr)
+
+				require.Equal(t, test.expectedErr, m)
+			} else {
+				require.NoError(t, err)
+			}
 
 			require.Equal(t, *result, test.expectedResult)
 		})

@@ -2,6 +2,7 @@ package makosh_resolver
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"sync"
 
@@ -39,9 +40,16 @@ func (r *Resolver) Resolve() error {
 		return errors.Wrap(err, "error getting ")
 	}
 
-	defer httpResp.Body.Close()
+	body, err := io.ReadAll(httpResp.Body)
+	if err != nil {
+		return errors.Wrap(err, "error reading body")
+	}
+
+	if httpResp.StatusCode != http.StatusOK {
+		return errors.New(string(body))
+	}
 	var endpointsResponse makosh_be.ListEndpoints_Response
-	err = json.NewDecoder(httpResp.Body).Decode(&endpointsResponse)
+	err = json.Unmarshal(body, &endpointsResponse)
 	if err != nil {
 		return errors.Wrap(err, "error parsing list endpoints response")
 	}

@@ -18,6 +18,8 @@ const (
 	MakoshSecret = "MAKOSH_SECRET"
 )
 
+const Header = "Grpc-Metadata-" + interceptors.Header
+
 var (
 	ErrNoMakoshSourceURL = errors.New("no " + MakoshURL + "is defined")
 	ErrNoMakoshSecret    = errors.New("no " + MakoshSecret + "is defined")
@@ -84,7 +86,7 @@ func (b *Builder) newResolver(targetName string, addressUpdater UpdateAddresses)
 		return nil, errors.Wrap(err, "error creating http request")
 	}
 
-	r.getAddressesRequest.Header.Set(interceptors.Header, b.secret)
+	r.getAddressesRequest.Header.Set(Header, b.secret)
 
 	return r, nil
 }
