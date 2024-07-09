@@ -5,5 +5,8 @@ app_info:
 data_sources: []
 server:
     - name: grpc
-      port: 50051
-environment: []
+      port: 53892
+environment:
+    - name: secret
+      type: string
+      value: makosh_secret

@@ -7,6 +7,8 @@ import (
 	errors "github.com/Red-Sock/trace-errors"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/resolver"
+
+	"github.com/godverv/makosh/internal/interceptors"
 )
 
 const Schema = "verv"
@@ -14,10 +16,6 @@ const Schema = "verv"
 const (
 	MakoshURL    = "MAKOSH_URL"
 	MakoshSecret = "MAKOSH_SECRET"
-)
-
-const (
-	MakoshAuthHeader = "X-Makosh-Auth"
 )
 
 var (
@@ -86,7 +84,7 @@ func (b *Builder) newResolver(targetName string, addressUpdater UpdateAddresses)
 		return nil, errors.Wrap(err, "error creating http request")
 	}
 
-	r.getAddressesRequest.Header.Set(MakoshAuthHeader, b.secret)
+	r.getAddressesRequest.Header.Set(interceptors.Header, b.secret)
 
 	return r, nil
 }

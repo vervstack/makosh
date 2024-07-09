@@ -15,6 +15,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
+
+	"github.com/godverv/makosh/internal/config"
+	"github.com/godverv/makosh/internal/interceptors"
 )
 
 type Server struct {
@@ -33,11 +36,14 @@ type Implementation interface {
 }
 
 func NewServer(
+	cfg config.Config,
 	server *servers.GRPC,
 	imps ...Implementation,
 ) (*Server, error) {
 
 	var opts []grpc.ServerOption
+
+	opts = append(opts, interceptors.GrpcInterceptor(cfg.GetEnvironment().Secret))
 
 	grpcServer := grpc.NewServer(opts...)
 

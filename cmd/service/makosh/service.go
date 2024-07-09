@@ -49,7 +49,7 @@ func New() (App, error) {
 
 	a := App{}
 
-	a.server, err = grpc.NewServer(grpcServer, makosh.New(cfg, inMemoryStore))
+	a.server, err = grpc.NewServer(cfg, grpcServer, makosh.New(cfg, inMemoryStore))
 	if err != nil {
 		return App{}, errors.Wrap(err, "error initializing server")
 	}

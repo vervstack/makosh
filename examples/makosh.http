@@ -1,10 +1,11 @@
 ### GetVersion
 GET {{makosh}}/v1/version
-
+Grpc-Metadata-Makosh-Auth: {{authHeader}}
 
 ### Post Service Address Info
 POST {{makosh}}/v1/endpoints
 Content-Type: application/json
+Grpc-Metadata-Makosh-Auth: {{authHeader}}
 
 {
   "endpoints": [
@@ -21,7 +22,8 @@ Content-Type: application/json
 
 ### List service address info
 GET {{makosh}}/v1/endpoints/red-cart
-
+Grpc-Metadata-Makosh-Auth: {{authHeader}}
 
 ### List database address info
 GET {{makosh}}/v1/endpoints/red-cart_pg
+Grpc-Metadata-Makosh-Auth: {{authHeader}}

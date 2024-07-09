@@ -9,7 +9,7 @@ build-local-container:
 	docker buildx build \
 			--load \
 			--platform linux/arm64 \
-			-t makosh_be:local .
+			-t makosh:local .
 
 ### Grpc server generation
 gen-server-grpc: .pre-gen-server-grpc .deps-grpc .gen-server-grpc
@@ -26,7 +26,6 @@ gen-server-grpc: .pre-gen-server-grpc .deps-grpc .gen-server-grpc
 	ln -sf $(GOPATH)/pkg/mod/github.com/envoyproxy/protoc-gen-validate@v1.0.2/validate api/validate
 .pre-gen-server-grpc:
 	mkdir -p pkg/
-	mkdir -p pkg/web
 
 .gen-server-grpc:
 	protoc \
@@ -35,7 +34,7 @@ gen-server-grpc: .pre-gen-server-grpc .deps-grpc .gen-server-grpc
     	--openapiv2_out ./api \
     	--go-grpc_out=./pkg/ \
     	--grpc-gateway_out=logtostderr=true:./pkg/ \
-    	--grpc-gateway-ts_out=./pkg/web \
+    	--grpc-gateway-ts_out=./pkg \
     	--go_out=./pkg/ \
 	    --validate_out="lang=go:./pkg" \
     	./api/grpc/*.proto

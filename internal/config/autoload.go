@@ -45,6 +45,11 @@ func Load() (Config, error) {
 		return nil, errors.Wrap(err, "error reading matreshka config")
 	}
 
+	err = defaultConfig.AppConfig.Environment.ParseToStruct(&defaultConfig.envConfig)
+	if err != nil {
+		return nil, errors.Wrap(err, "error parsing environment to struct")
+	}
+
 	return &defaultConfig, nil
 }
 
