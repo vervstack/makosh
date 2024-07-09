@@ -1,0 +1,27 @@
+### GetVersion
+GET {{makosh}}/v1/version
+
+
+### Post Service Address Info
+POST {{makosh}}/v1/endpoints
+Content-Type: application/json
+
+{
+  "endpoints": [
+    {
+      "service_name": "red-cart",
+      "addrs": ["116.44.155.230:6789", "2.136.96.67:8906"]
+    },
+    {
+      "service_name": "red-cart_pg",
+      "addrs": ["29.144.101.86:5432", "110.199.125.214:5432"]
+    }
+  ]
+}
+
+### List service address info
+GET {{makosh}}/v1/endpoints/red-cart
+
+
+### List database address info
+GET {{makosh}}/v1/endpoints/red-cart_pg

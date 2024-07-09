@@ -9,8 +9,7 @@ option go_package = "/makosh_be";
 service makoshBeAPI {
   rpc Version(Version.Request) returns (Version.Response) {
     option (google.api.http) = {
-      post: "/v1/version"
-      body: "*"
+      get: "/v1/version"
     };
   };
 

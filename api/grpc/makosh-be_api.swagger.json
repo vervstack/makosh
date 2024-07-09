@@ -79,7 +79,7 @@
       }
     },
     "/v1/version": {
-      "post": {
+      "get": {
         "operationId": "makoshBeAPI_Version",
         "responses": {
           "200": {
@@ -95,16 +95,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/makosh_be_apiVersionRequest"
-            }
-          }
-        ],
         "tags": [
           "makoshBeAPI"
         ]
@@ -150,9 +140,6 @@
       }
     },
     "makosh_be_apiUpsertEndpointsResponse": {
-      "type": "object"
-    },
-    "makosh_be_apiVersionRequest": {
       "type": "object"
     },
     "makosh_be_apiVersionResponse": {
