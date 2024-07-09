@@ -12,9 +12,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/godverv/makosh-be/internal/domain"
-	"github.com/godverv/makosh-be/pkg/makosh_be"
-	"github.com/godverv/makosh-be/pkg/makosh_resolver"
+	"github.com/godverv/makosh/internal/domain"
+	"github.com/godverv/makosh/pkg/makosh_be"
+	"github.com/godverv/makosh/pkg/makosh_resolver"
 )
 
 const (

@@ -5,7 +5,7 @@ import (
 
 	errors "github.com/Red-Sock/trace-errors"
 
-	"github.com/godverv/makosh-be/internal/domain"
+	"github.com/godverv/makosh/internal/domain"
 )
 
 func (d *InMemoryDb) Get(_ context.Context, serviceName string) (domain.Endpoint, error) {

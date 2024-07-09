@@ -3,7 +3,7 @@ package store
 import (
 	"context"
 
-	"github.com/godverv/makosh-be/internal/domain"
+	"github.com/godverv/makosh/internal/domain"
 )
 
 type Data interface {

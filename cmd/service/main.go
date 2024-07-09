@@ -11,11 +11,11 @@ import (
 	errors "github.com/Red-Sock/trace-errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/godverv/makosh-be/internal/config"
-	"github.com/godverv/makosh-be/internal/store/in_memory"
-	"github.com/godverv/makosh-be/internal/transport/grpc"
-	"github.com/godverv/makosh-be/internal/transport/grpc/makosh"
-	"github.com/godverv/makosh-be/internal/utils/closer"
+	"github.com/godverv/makosh/internal/config"
+	"github.com/godverv/makosh/internal/store/in_memory"
+	"github.com/godverv/makosh/internal/transport/grpc"
+	"github.com/godverv/makosh/internal/transport/grpc/makosh"
+	"github.com/godverv/makosh/internal/utils/closer"
 )
 
 func main() {

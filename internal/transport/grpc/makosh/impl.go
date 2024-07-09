@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/godverv/makosh-be/internal/config"
-	"github.com/godverv/makosh-be/internal/store"
-	"github.com/godverv/makosh-be/pkg/makosh_be"
+	"github.com/godverv/makosh/internal/config"
+	"github.com/godverv/makosh/internal/store"
+	"github.com/godverv/makosh/pkg/makosh_be"
 )
 
 type Implementation struct {

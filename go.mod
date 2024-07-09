@@ -1,4 +1,4 @@
-module github.com/godverv/makosh-be
+module github.com/godverv/makosh
 
 go 1.22.1
 

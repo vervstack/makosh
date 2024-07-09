@@ -9,7 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/resolver"
 
-	"github.com/godverv/makosh-be/pkg/makosh_be"
+	"github.com/godverv/makosh/pkg/makosh_be"
 )
 
 type UpdateAddresses func(addrs []string) error

@@ -5,7 +5,7 @@ import (
 
 	errors "github.com/Red-Sock/trace-errors"
 
-	"github.com/godverv/makosh-be/pkg/makosh_be"
+	"github.com/godverv/makosh/pkg/makosh_be"
 )
 
 func (impl *Implementation) ListEndpoints(ctx context.Context, req *makosh_be.ListEndpoints_Request) (*makosh_be.ListEndpoints_Response, error) {
