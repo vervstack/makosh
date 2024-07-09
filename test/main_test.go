@@ -12,14 +12,15 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
+	"github.com/godverv/makosh/cmd/service/makosh"
 	"github.com/godverv/makosh/internal/domain"
 	"github.com/godverv/makosh/pkg/makosh_be"
-	"github.com/godverv/makosh/pkg/makosh_resolver"
 )
 
 const (
-	makoshEndpoint = "0.0.0.0:53892"
-	makoshSecret   = "makosh_secret"
+	grpcMakoshEndpoint = "0.0.0.0:1001"
+	httpMakoshEndpoint = "http://" + grpcMakoshEndpoint
+	makoshSecret       = "makosh_secret"
 )
 
 const (
@@ -33,6 +34,8 @@ const (
 var log = logrus.New()
 
 func TestMain(m *testing.M) {
+	startMakoshService()
+
 	initEnv()
 
 	code := m.Run()
@@ -41,8 +44,6 @@ func TestMain(m *testing.M) {
 	}
 	os.Exit(code)
 }
-
-var resolverBuilder *makosh_resolver.Builder
 
 var makoshClient makosh_be.MakoshBeAPIClient
 
@@ -59,6 +60,18 @@ var (
 	}
 )
 
+func startMakoshService() {
+	app, err := makosh.New()
+	if err != nil {
+		log.Fatal(errors.Wrap(err, "error starting makosh service "))
+		return
+	}
+
+	go func() {
+		err = app.Start()
+		log.Fatal("error starting service: ", err.Error())
+	}()
+}
 func initEnv() {
 	ctx := context.Background()
 	var err error
@@ -81,18 +94,10 @@ func initEnv() {
 		log.Fatal(err.Error())
 		return
 	}
-	resolverBuilder, err = makosh_resolver.New(
-		makosh_resolver.WithMakoshURL("http://"+makoshEndpoint),
-		makosh_resolver.WithMakoshSecret(makoshSecret),
-	)
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
 }
 
 func prepareMakoshClient(ctx context.Context) (makosh_be.MakoshBeAPIClient, error) {
-	dial, err := grpc.NewClient(makoshEndpoint,
+	dial, err := grpc.NewClient(grpcMakoshEndpoint,
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, errors.Wrap(err, "error connecting to makosh")

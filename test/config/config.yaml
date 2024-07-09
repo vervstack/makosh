@@ -1,0 +1,12 @@
+app_info:
+    name: github.com/godverv/makosh
+    version: 0.0.1
+    startup_duration: 10s
+data_sources: []
+server:
+    - name: grpc
+      port: 1001
+environment:
+  - name: secret
+    type: string
+    value: makosh_secret
