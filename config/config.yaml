@@ -6,4 +6,7 @@ data_sources: []
 server:
     - name: grpc
       port: 53892
-environment: []
+environment:
+    - name: auth_token
+      value: auth
+      type: string

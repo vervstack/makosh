@@ -43,7 +43,7 @@ func NewServer(
 
 	var opts []grpc.ServerOption
 
-	opts = append(opts, interceptors.GrpcInterceptor(cfg.GetEnvironment().Secret))
+	opts = append(opts, interceptors.GrpcInterceptor(cfg.GetEnvironment().AuthToken))
 
 	grpcServer := grpc.NewServer(opts...)
 

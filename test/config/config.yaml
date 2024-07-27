@@ -7,6 +7,6 @@ server:
     - name: grpc
       port: 1001
 environment:
-  - name: secret
-    type: string
-    value: makosh_secret
+    - name: auth_token
+      type: string
+      value: makosh_secret

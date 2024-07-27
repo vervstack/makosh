@@ -47,7 +47,7 @@ func Load() (Config, error) {
 
 	err = defaultConfig.AppConfig.Environment.ParseToStruct(&defaultConfig.envConfig)
 	if err != nil {
-		return nil, errors.Wrap(err, "error parsing environment to struct")
+		return nil, errors.Wrap(err, "error parsing into environment struct")
 	}
 
 	return &defaultConfig, nil

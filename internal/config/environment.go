@@ -3,5 +3,5 @@
 package config
 
 type EnvironmentConfig struct {
-	Secret string
+	AuthToken string
 }
