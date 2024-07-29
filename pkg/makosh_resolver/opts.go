@@ -21,3 +21,15 @@ func WithLogger(logger logrus.StdLogger) opt {
 		b.logger = logger
 	}
 }
+
+func WithOverride(serviceName string, urls []string) opt {
+	return func(b *Builder) {
+		b.overrides[serviceName] = urls
+	}
+}
+
+func WithOverrides(m map[string][]string) opt {
+	return func(b *Builder) {
+		b.overrides = m
+	}
+}

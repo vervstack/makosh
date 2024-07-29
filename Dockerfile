@@ -13,6 +13,8 @@ FROM alpine
 
 WORKDIR /app
 
+ENV VERV_NAME=makosh
+
 COPY --from=builder /deploy/server/ .
 
 EXPOSE 80

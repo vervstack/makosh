@@ -36,6 +36,8 @@ type Builder struct {
 	makoshUrl string
 	secret    string
 	logger    logrus.StdLogger
+
+	overrides map[string][]string
 }
 
 type opt func(b *Builder)
@@ -45,6 +47,7 @@ func New(opts ...opt) (*Builder, error) {
 		makoshUrl: os.Getenv(MakoshURL),
 		secret:    os.Getenv(MakoshSecret),
 		logger:    logrus.New(),
+		overrides: make(map[string][]string),
 	}
 
 	for _, o := range opts {
@@ -62,8 +65,8 @@ func New(opts ...opt) (*Builder, error) {
 }
 
 // Build - for grpc resolving
-func (b *Builder) Build(t resolver.Target, cc resolver.ClientConn, _ resolver.BuildOptions) (resolver.Resolver, error) {
-	return b.newResolver(t.Endpoint(), updateGrpc(cc))
+func (b *Builder) Build(t resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
+	return b.newResolver(t.URL.Host, updateGrpc(cc))
 }
 
 func (b *Builder) BuildHTTPResolver(targetName string, addressUpdater UpdateAddresses) (*Resolver, error) {
@@ -76,7 +79,8 @@ func (b *Builder) Scheme() string {
 
 func (b *Builder) newResolver(targetName string, addressUpdater UpdateAddresses) (*Resolver, error) {
 	r := &Resolver{
-		doUpdate: addressUpdater,
+		doUpdate:  addressUpdater,
+		overrides: b.overrides[targetName],
 	}
 	url := b.makoshUrl + "/v1/endpoints/" + targetName
 
@@ -87,6 +91,11 @@ func (b *Builder) newResolver(targetName string, addressUpdater UpdateAddresses)
 	}
 
 	r.getAddressesRequest.Header.Set(Header, b.secret)
+
+	err = r.Resolve()
+	if err != nil {
+		return nil, errors.Wrap(err, "error resolving addresses")
+	}
 
 	return r, nil
 }

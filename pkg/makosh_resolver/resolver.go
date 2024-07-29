@@ -23,6 +23,8 @@ type Resolver struct {
 	doUpdate UpdateAddresses
 
 	log logrus.StdLogger
+
+	overrides []string
 }
 
 func (r *Resolver) ResolveNow(_ resolver.ResolveNowOptions) {
@@ -35,6 +37,10 @@ func (r *Resolver) ResolveNow(_ resolver.ResolveNowOptions) {
 func (r *Resolver) Close() {}
 
 func (r *Resolver) Resolve() error {
+	if len(r.overrides) != 0 {
+		return r.doUpdate(r.overrides)
+	}
+
 	httpResp, err := http.DefaultClient.Do(r.getAddressesRequest)
 	if err != nil {
 		return errors.Wrap(err, "error getting ")
@@ -48,6 +54,7 @@ func (r *Resolver) Resolve() error {
 	if httpResp.StatusCode != http.StatusOK {
 		return errors.New(string(body))
 	}
+
 	var endpointsResponse makosh_be.ListEndpoints_Response
 	err = json.Unmarshal(body, &endpointsResponse)
 	if err != nil {
