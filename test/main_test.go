@@ -21,7 +21,7 @@ import (
 
 const (
 	grpcMakoshEndpoint = "0.0.0.0:1001"
-	httpMakoshEndpoint = "http://" + grpcMakoshEndpoint
+	httpMakoshEndpoint = "http://" + grpcMakoshEndpoint + "/v1/endpoints/"
 	makoshSecret       = "makosh_secret"
 )
 
@@ -76,7 +76,7 @@ func startMakoshService() {
 }
 func initEnv() {
 	md := metadata.New(map[string]string{
-		interceptors.Header: makoshSecret,
+		interceptors.AuthHeader: makoshSecret,
 	})
 
 	ctx := metadata.NewOutgoingContext(context.Background(), md)

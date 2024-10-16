@@ -8,10 +8,11 @@ import (
 	"google.golang.org/grpc/codes"
 
 	"github.com/godverv/makosh/internal/interceptors"
-	"github.com/godverv/makosh/pkg/makosh_resolver"
+	"github.com/godverv/makosh/pkg/makosh"
+	"github.com/godverv/makosh/pkg/makosh/makosh_resolver"
 )
 
-func Test_Resolver(t *testing.T) {
+func Test_Resolving(t *testing.T) {
 	t.Parallel()
 
 	type testCase struct {
@@ -22,7 +23,8 @@ func Test_Resolver(t *testing.T) {
 
 		getUpdaterAndResult func() (updateFunc func([]string) error, resultSlice *[]string)
 		expectedResult      []string
-		expectedErr         map[string]any
+		// Error for service discovery error responses
+		expectedServiceErr map[string]any
 	}
 
 	testCases := map[string]testCase{
@@ -51,7 +53,7 @@ func Test_Resolver(t *testing.T) {
 				}, resultSlice
 			},
 			expectedResult: []string{},
-			expectedErr: map[string]any{
+			expectedServiceErr: map[string]any{
 				"code":    float64(codes.PermissionDenied),
 				"message": interceptors.InvalidAuthErrMessage,
 			},
@@ -61,25 +63,32 @@ func Test_Resolver(t *testing.T) {
 	for name, tc := range testCases {
 		testName, test := name, tc
 		t.Run(testName, func(t *testing.T) {
-			resolverBuilder, err := makosh_resolver.New(
-				makosh_resolver.WithMakoshURL(test.makoshEndPoint),
-				makosh_resolver.WithMakoshSecret(test.makoshSecret),
+
+			makoshBuilder, err := makosh_resolver.NewBuilder(
+				makosh_resolver.WithURL(test.makoshEndPoint),
+				makosh_resolver.WithSecret(test.makoshSecret),
 			)
 			require.NoError(t, err)
 
-			updater, result := test.getUpdaterAndResult()
-			resolver, err := resolverBuilder.BuildHTTPResolver(test.targetName, updater)
+			resolverBuilder, err := makosh.NewLocalServiceDiscovery(
+				makosh.WithResolverBuilder(makoshBuilder),
+			)
+
+			updaterCallback, result := test.getUpdaterAndResult()
+			resolverPtr, err := resolverBuilder.GetResolver(test.targetName)
 			require.NoError(t, err)
+			resolver := *resolverPtr.Load()
+			resolver.AddUpdateCallbacks(updaterCallback)
 
 			err = resolver.Resolve()
-			if test.expectedErr != nil {
+			if test.expectedServiceErr == nil {
+				require.NoError(t, err)
+			} else {
 				m := make(map[string]any)
 				marshErr := json.Unmarshal([]byte(err.Error()), &m)
 				require.NoError(t, marshErr)
 
-				require.Equal(t, test.expectedErr, m)
-			} else {
-				require.NoError(t, err)
+				require.Equal(t, test.expectedServiceErr, m)
 			}
 
 			require.Equal(t, *result, test.expectedResult)

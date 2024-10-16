@@ -10,16 +10,16 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Header - header containing auth token to talk to service
+// AuthHeader - header containing auth token to talk to service
 // in order to perform REST call should pre append runtime.MetadataHeaderPrefix (e.g - "Grpc-Metadata-")
 const (
-	Header = "Makosh-Auth"
+	AuthHeader = "Makosh-Auth"
 
 	NoAuthErrMessage      = "no auth header"
 	InvalidAuthErrMessage = "invalid auth header"
 )
 
-func GrpcInterceptor(secret string) grpc.ServerOption {
+func GrpcAuthInterceptor(secret string) grpc.ServerOption {
 	return grpc.ChainUnaryInterceptor(
 		func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 			md, ok := metadata.FromIncomingContext(ctx)
@@ -27,7 +27,7 @@ func GrpcInterceptor(secret string) grpc.ServerOption {
 				return nil, status.Error(codes.FailedPrecondition, "error unmarshalling metadata from context")
 			}
 
-			auth := md.Get(Header)
+			auth := md.Get(AuthHeader)
 			if len(auth) == 0 {
 				return nil, status.Error(codes.PermissionDenied, NoAuthErrMessage)
 			}
