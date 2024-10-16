@@ -13,8 +13,7 @@ import (
 const DefaultSchema = "verv"
 
 type LocalServiceDiscovery struct {
-	schema    string
-	overrides map[string][]string
+	schema string
 
 	m         sync.Mutex
 	resolvers map[string]*atomic.Pointer[makosh_resolver.EndpointsResolver]
@@ -27,8 +26,6 @@ type opt func(b *LocalServiceDiscovery)
 // NewLocalServiceDiscovery creates builder for local service discovery
 func NewLocalServiceDiscovery(opts ...opt) (*LocalServiceDiscovery, error) {
 	b := &LocalServiceDiscovery{
-		overrides: make(map[string][]string),
-
 		schema:    DefaultSchema,
 		resolvers: map[string]*atomic.Pointer[makosh_resolver.EndpointsResolver]{},
 	}

@@ -10,25 +10,18 @@ import (
 
 type Resolver struct {
 	resolverPtr *atomic.Pointer[makosh_resolver.EndpointsResolver]
-	//log         logrus.FieldLogger
 }
 
 func NewGrpcResolver(
 	resolverPtr *atomic.Pointer[makosh_resolver.EndpointsResolver],
-	// log logrus.FieldLogger
 ) *Resolver {
 	return &Resolver{
 		resolverPtr: resolverPtr,
-		//log:         log,
 	}
 }
 
 func (r *Resolver) ResolveNow(resolver.ResolveNowOptions) {
-	err := (*r.resolverPtr.Load()).Resolve()
-	if err != nil {
-		// TODO
-		//r.log.Println("error resolving connections", err.Error())
-	}
+	_ = (*r.resolverPtr.Load()).Resolve()
 }
 
 func (r *Resolver) Close() {}

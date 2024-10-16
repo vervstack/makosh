@@ -28,7 +28,6 @@ func NewBuilder(src serviceDiscovery, schema string) *Builder {
 // Build - implements grpc resolver.Builder
 // Builds resolver for each host name
 func (b *Builder) Build(t resolver.Target, cc resolver.ClientConn, _ resolver.BuildOptions) (resolver.Resolver, error) {
-	// If already have resolver for this target - return it
 	resolverPtr, err := b.localSD.GetResolver(t.URL.Host)
 	if err != nil {
 		return nil, errors.Wrap(err, "error getting resolver from local service discovery")
