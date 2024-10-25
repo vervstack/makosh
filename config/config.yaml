@@ -3,7 +3,8 @@ app_info:
     version: v0.0.5
     startup_duration: 10s
 data_sources: []
-server: []
+server:
+  8080: {}
 environment:
     - name: auth_token
       value: K/ENz2Bpd4IgA5NCj8qovFpGGBktQkUqVHvb6ASj1rCcd29gSfQYhRWIT3+IqVjJK9xEDvL9yI4FOZugrL2+dkGMvUYRKRTnul39dwkjoqmUc4q/WwPwlhJPwoadM1PVzVINdDV5ILRqVpHjDd9KYXY8mouI4vEd7ccwuNFWFVAg6np/+t95+pz1xQAQSkPH8UBic/5h8IULZFvNaeo5CHdQq46YUC4qUNWwqzHGLjYRNFjB6AY2QSRd80c+fuUz
