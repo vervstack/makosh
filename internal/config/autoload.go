@@ -8,7 +8,7 @@ import (
 	errors "github.com/Red-Sock/trace-errors"
 	"github.com/godverv/matreshka"
 	"github.com/godverv/matreshka/resources"
-	"github.com/godverv/matreshka/servers"
+	"github.com/godverv/matreshka/server"
 )
 
 var ErrAlreadyLoaded = errors.New("config already loaded")
@@ -84,8 +84,8 @@ type Config interface {
 }
 
 type API interface {
-	REST(name string) (*servers.Rest, error)
-	GRPC(name string) (*servers.GRPC, error)
+	REST(name string) (*server.Rest, error)
+	GRPC(name string) (*server.GRPC, error)
 }
 
 type Resources interface {
