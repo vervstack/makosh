@@ -2,6 +2,8 @@ app_info:
     name: github.com/godverv/makosh
     version: v0.0.5
     startup_duration: 10s
+servers:
+    8080: {}
 environment:
     - name: auth token
       type: string

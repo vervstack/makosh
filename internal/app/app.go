@@ -7,6 +7,7 @@ import (
 	"github.com/Red-Sock/toolbox/closer"
 	errors "github.com/Red-Sock/trace-errors"
 	"github.com/godverv/makosh/internal/config"
+	"github.com/godverv/makosh/internal/transport"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
@@ -15,6 +16,8 @@ type App struct {
 	Ctx  context.Context
 	Stop func()
 	Cfg  config.Config
+	/* Servers managers */
+	Server *transport.ServersManager
 
 	Custom Custom
 }
@@ -27,6 +30,11 @@ func New() (app App, err error) {
 		return App{}, errors.Wrap(err, "error initializing config")
 	}
 
+	err = app.InitServers()
+	if err != nil {
+		return App{}, errors.Wrap(err, "error during server initialization")
+	}
+
 	err = app.Custom.Init(&app)
 	if err != nil {
 		return App{}, errors.Wrap(err, "error initializing custom app properties")
@@ -36,6 +44,11 @@ func New() (app App, err error) {
 }
 
 func (a *App) Start() (err error) {
+	err = a.Server.Start()
+	if err != nil {
+		return errors.Wrap(err, "error starting Server manager")
+	}
+	closer.Add(func() error { return a.Server.Stop() })
 	toolbox.WaitForInterrupt()
 
 	logrus.Println("shutting down the app")
