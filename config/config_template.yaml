@@ -3,7 +3,10 @@ app_info:
     version: v0.0.5
     startup_duration: 10s
 servers:
-    8080: {}
+  8080:
+    /{GRPC}:
+      module: pkg/makosh_be
+      gateway: /api
 environment:
     - name: auth token
       type: string
