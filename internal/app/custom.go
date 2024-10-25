@@ -3,10 +3,23 @@
 
 package app
 
-type Custom struct{}
+import (
+	"github.com/godverv/makosh/internal/store"
+	"github.com/godverv/makosh/internal/store/in_memory"
+	"github.com/godverv/makosh/internal/transport/grpc/makosh"
+)
+
+type Custom struct {
+	store store.EndpointsStorage
+}
 
 func (c *Custom) Init(a *App) error {
 	// Repository, Service logic, transport registration happens here
+	c.store = in_memory.New()
+
+	imp := makosh.New(a.Cfg, c.store)
+
+	a.Server.AddGrpcServer(imp)
 
 	return nil
 }

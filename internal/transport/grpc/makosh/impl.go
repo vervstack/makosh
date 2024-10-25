@@ -15,18 +15,18 @@ import (
 type Implementation struct {
 	makosh_be.UnimplementedMakoshBeAPIServer
 
-	data    store.Data
+	data    store.EndpointsStorage
 	version string
 }
 
-func New(cfg config.Config, data store.Data) *Implementation {
+func New(cfg config.Config, data store.EndpointsStorage) *Implementation {
 	return &Implementation{
 		data:    data,
-		version: cfg.GetAppInfo().Version,
+		version: cfg.AppInfo.Version,
 	}
 }
 
-func (impl *Implementation) Register(server grpc.ServiceRegistrar) {
+func (impl *Implementation) Register(server *grpc.Server) {
 	makosh_be.RegisterMakoshBeAPIServer(server, impl)
 }
 

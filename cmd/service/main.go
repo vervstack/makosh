@@ -5,11 +5,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/godverv/makosh/cmd/service/makosh"
+	"github.com/godverv/makosh/internal/app"
 )
 
 func main() {
-	app, err := makosh.New()
+	app, err := app.New()
 	if err != nil {
 		logrus.Fatal(err)
 	}
