@@ -38,7 +38,7 @@ func Test_Resolver(t *testing.T) {
 
 		callbackCalledTimes := 0
 
-		resolver.AddUpdateCallbacks(func(_ []string) error {
+		resolver.AddSubscribers(func(_ []string) error {
 			callbackCalledTimes++
 			return nil
 		})

@@ -1,4 +1,4 @@
-package makosh
+package resolver
 
 import (
 	"sync"
@@ -6,13 +6,13 @@ import (
 
 	errors "github.com/Red-Sock/trace-errors"
 
-	"github.com/godverv/makosh/pkg/makosh/grpc"
-	"github.com/godverv/makosh/pkg/makosh/makosh_resolver"
+	"github.com/godverv/makosh/pkg/resolver/grpc"
+	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
 )
 
 const DefaultSchema = "verv"
 
-type LocalServiceDiscovery struct {
+type ServiceDiscovery struct {
 	schema string
 
 	m         sync.Mutex
@@ -21,11 +21,11 @@ type LocalServiceDiscovery struct {
 	resolverBuilder makosh_resolver.ResolverBuilder
 }
 
-type opt func(b *LocalServiceDiscovery)
+type opt func(b *ServiceDiscovery)
 
 // NewLocalServiceDiscovery creates builder for local service discovery
-func NewLocalServiceDiscovery(opts ...opt) (*LocalServiceDiscovery, error) {
-	b := &LocalServiceDiscovery{
+func NewLocalServiceDiscovery(opts ...opt) (*ServiceDiscovery, error) {
+	b := &ServiceDiscovery{
 		schema:    DefaultSchema,
 		resolvers: map[string]*atomic.Pointer[makosh_resolver.EndpointsResolver]{},
 	}
@@ -45,8 +45,8 @@ func NewLocalServiceDiscovery(opts ...opt) (*LocalServiceDiscovery, error) {
 	return b, nil
 }
 
-func (b *LocalServiceDiscovery) SetCustomResolver(
-	newResolver makosh_resolver.EndpointsResolver, serviceNames ...string) error {
+func (b *ServiceDiscovery) SetCustomResolver(
+	newResolver makosh_resolver.Resolver, serviceNames ...string) error {
 	b.m.Lock()
 	defer b.m.Unlock()
 
@@ -57,20 +57,20 @@ func (b *LocalServiceDiscovery) SetCustomResolver(
 			b.resolvers[serviceName] = rPtr
 		} else {
 			oldResolver := *rPtr.Load()
-			newResolver.AddUpdateCallbacks(oldResolver.GetUpdaters()...)
+			newResolver.AddSubscribers(oldResolver.GetSubscribers()...)
 		}
 
-		rPtr.Store(&newResolver)
+		rPtr.Store(&makosh_resolver.EndpointsResolver{Resolver: newResolver})
 	}
 
 	return nil
 }
 
-func (b *LocalServiceDiscovery) GrpcBuilder() *grpc.Builder {
+func (b *ServiceDiscovery) GrpcBuilder() *grpc.Builder {
 	return grpc.NewBuilder(b, b.schema)
 }
 
-func (b *LocalServiceDiscovery) GetResolver(target string) (*atomic.Pointer[makosh_resolver.EndpointsResolver], error) {
+func (b *ServiceDiscovery) GetResolver(target string) (*atomic.Pointer[makosh_resolver.EndpointsResolver], error) {
 	b.m.Lock()
 	defer b.m.Unlock()
 

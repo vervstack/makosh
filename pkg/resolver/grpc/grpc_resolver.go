@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/grpc/resolver"
 
-	"github.com/godverv/makosh/pkg/makosh/makosh_resolver"
+	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
 )
 
 type Resolver struct {
@@ -26,7 +26,7 @@ func (r *Resolver) ResolveNow(resolver.ResolveNowOptions) {
 
 func (r *Resolver) Close() {}
 
-func updateGrpcCallback(cc resolver.ClientConn) makosh_resolver.UpdateAddresses {
+func updateGrpcCallback(cc resolver.ClientConn) makosh_resolver.DoUpdateAddress {
 	return func(addrs []string) error {
 		var state resolver.State
 

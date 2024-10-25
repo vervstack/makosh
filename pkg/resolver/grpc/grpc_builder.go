@@ -6,7 +6,7 @@ import (
 	errors "github.com/Red-Sock/trace-errors"
 	"google.golang.org/grpc/resolver"
 
-	"github.com/godverv/makosh/pkg/makosh/makosh_resolver"
+	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
 )
 
 type serviceDiscovery interface {
@@ -35,8 +35,11 @@ func (b *Builder) Build(t resolver.Target, cc resolver.ClientConn, _ resolver.Bu
 
 	reslvr := resolverPtr.Load()
 
-	(*reslvr).AddUpdateCallbacks(updateGrpcCallback(cc))
-
+	(*reslvr).AddSubscribers(updateGrpcCallback(cc))
+	err = reslvr.Resolve()
+	if err != nil {
+		return nil, errors.Wrap(err, "error resolving endpoint")
+	}
 	return NewGrpcResolver(resolverPtr), nil
 }
 

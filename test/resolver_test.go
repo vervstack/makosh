@@ -8,8 +8,8 @@ import (
 	"google.golang.org/grpc/codes"
 
 	"github.com/godverv/makosh/internal/interceptors"
-	"github.com/godverv/makosh/pkg/makosh"
-	"github.com/godverv/makosh/pkg/makosh/makosh_resolver"
+	"github.com/godverv/makosh/pkg/resolver"
+	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
 )
 
 func Test_Resolving(t *testing.T) {
@@ -70,15 +70,15 @@ func Test_Resolving(t *testing.T) {
 			)
 			require.NoError(t, err)
 
-			resolverBuilder, err := makosh.NewLocalServiceDiscovery(
-				makosh.WithResolverBuilder(makoshBuilder),
+			resolverBuilder, err := resolver.NewLocalServiceDiscovery(
+				resolver.WithResolverBuilder(makoshBuilder),
 			)
 
 			updaterCallback, result := test.getUpdaterAndResult()
 			resolverPtr, err := resolverBuilder.GetResolver(test.targetName)
 			require.NoError(t, err)
 			resolver := *resolverPtr.Load()
-			resolver.AddUpdateCallbacks(updaterCallback)
+			resolver.AddSubscribers(updaterCallback)
 
 			err = resolver.Resolve()
 			if test.expectedServiceErr == nil {

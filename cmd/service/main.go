@@ -13,6 +13,7 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
+
 	err = app.Start()
 	if err != nil {
 		logrus.Fatal(err)

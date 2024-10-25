@@ -66,17 +66,27 @@ func NewBuilder(opts ...opt) (*RemoteResolverBuilder, error) {
 }
 
 func (r *RemoteResolverBuilder) NewResolver(target string) (EndpointsResolver, error) {
+	if target == "makosh" {
+		return EndpointsResolver{
+			Resolver: NewStaticResolver(r.remoteServiceDiscoveryURL[:len(r.remoteServiceDiscoveryURL)-1]),
+		}, nil
+	}
+
 	req, err := http.NewRequest(
 		http.MethodGet,
 		r.remoteServiceDiscoveryURL+target,
 		nil)
 	if err != nil {
-		return nil, errors.Wrap(err, "error creating http request")
+		return EndpointsResolver{}, errors.Wrap(err, "error creating http request")
 	}
 
 	if !r.isPublic {
 		req.Header.Set(Header, r.secret)
 	}
 
-	return NewMakoshResolver(req), nil
+	makoshResolver := NewMakoshResolver(req)
+
+	return EndpointsResolver{
+		Resolver: makoshResolver,
+	}, nil
 }
