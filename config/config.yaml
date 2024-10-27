@@ -1,6 +1,6 @@
 app_info:
     name: github.com/godverv/makosh
-    version: v0.0.5
+    version: v0.0.6
     startup_duration: 10s
 data_sources: []
 server:
