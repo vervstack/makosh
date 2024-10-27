@@ -2,7 +2,6 @@ package makosh_resolver
 
 import (
 	"net/http"
-	"net/url"
 	"os"
 
 	errors "github.com/Red-Sock/trace-errors"
@@ -51,11 +50,6 @@ func NewBuilder(opts ...opt) (*RemoteResolverBuilder, error) {
 	if rsd.secret == "" && !rsd.isPublic {
 		return nil, errors.Wrap(ErrNoMakoshSecret, "Need secret to connect to address resolver or "+
 			"service discovery to be public")
-	}
-
-	_, err := url.ParseRequestURI(rsd.remoteServiceDiscoveryURL)
-	if err != nil {
-		return nil, errors.Wrap(err, "invalid service discovery url")
 	}
 
 	if rsd.remoteServiceDiscoveryURL[len(rsd.remoteServiceDiscoveryURL)-1] != '/' {

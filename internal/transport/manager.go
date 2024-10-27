@@ -8,8 +8,6 @@ import (
 	errors "github.com/Red-Sock/trace-errors"
 	"github.com/soheilhy/cmux"
 	"golang.org/x/sync/errgroup"
-
-	"github.com/godverv/makosh/internal/config"
 )
 
 type ServersManager struct {
@@ -21,7 +19,7 @@ type ServersManager struct {
 	httpServer
 }
 
-func NewServerManager(ctx context.Context, cfg config.Config, port string) (*ServersManager, error) {
+func NewServerManager(ctx context.Context, port string) (*ServersManager, error) {
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		return nil, errors.Wrap(err, "error opening listener")
@@ -34,7 +32,7 @@ func NewServerManager(ctx context.Context, cfg config.Config, port string) (*Ser
 		ctx: ctx,
 		mux: mainMux,
 
-		grpcServer: newGrpcServer(ctx, mainMux.Match(cmux.HTTP2()), httpMux, cfg),
+		grpcServer: newGrpcServer(ctx, mainMux.Match(cmux.HTTP2()), httpMux),
 		httpServer: newHttpServer(mainMux.Match(cmux.Any()), httpMux),
 	}
 

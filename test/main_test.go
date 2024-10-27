@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/godverv/makosh/cmd/service/makosh"
+	"github.com/godverv/makosh/internal/app"
 	"github.com/godverv/makosh/internal/domain"
 	"github.com/godverv/makosh/internal/interceptors"
 	"github.com/godverv/makosh/pkg/makosh_be"
@@ -63,7 +63,7 @@ var (
 )
 
 func startMakoshService() {
-	app, err := makosh.New()
+	app, err := app.New()
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "error starting makosh service "))
 		return

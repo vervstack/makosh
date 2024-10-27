@@ -7,9 +7,6 @@ import (
 
 	errors "github.com/Red-Sock/trace-errors"
 	"google.golang.org/grpc"
-
-	"github.com/godverv/makosh/internal/config"
-	"github.com/godverv/makosh/internal/interceptors"
 )
 
 type GrpcImpl interface {
@@ -29,15 +26,10 @@ type grpcServer struct {
 	gatewayMux *http.ServeMux
 }
 
-func newGrpcServer(
-	ctx context.Context,
-	listener net.Listener,
-	gatewayMux *http.ServeMux,
-	cfg config.Config,
-) grpcServer {
+func newGrpcServer(ctx context.Context, listener net.Listener, gatewayMux *http.ServeMux) grpcServer {
 	return grpcServer{
 		ctx:        ctx,
-		server:     grpc.NewServer(interceptors.GrpcAuthInterceptor(cfg.Environment.AuthToken)),
+		server:     grpc.NewServer(),
 		listener:   listener,
 		gatewayMux: gatewayMux,
 	}
