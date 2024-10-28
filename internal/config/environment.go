@@ -3,6 +3,6 @@
 package config
 
 type EnvironmentConfig struct {
-	AuthToken string
-	AuthToken string
+	AuthToken       string
+	DisableSecurity bool
 }

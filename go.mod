@@ -3,7 +3,7 @@ module github.com/godverv/makosh
 go 1.22.1
 
 require (
-	github.com/Red-Sock/toolbox v0.0.4
+	github.com/Red-Sock/toolbox v0.0.5
 	github.com/Red-Sock/trace-errors v0.0.9
 	github.com/godverv/matreshka v0.0.35
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
