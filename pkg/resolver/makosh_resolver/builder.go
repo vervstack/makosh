@@ -3,6 +3,7 @@ package makosh_resolver
 import (
 	"net/http"
 	"os"
+	"strings"
 
 	errors "github.com/Red-Sock/trace-errors"
 
@@ -31,6 +32,8 @@ type RemoteResolverBuilder struct {
 	remoteServiceDiscoveryURL string
 	secret                    string
 	isPublic                  bool
+
+	protoc string
 }
 
 func NewBuilder(opts ...opt) (*RemoteResolverBuilder, error) {
@@ -56,6 +59,13 @@ func NewBuilder(opts ...opt) (*RemoteResolverBuilder, error) {
 		rsd.remoteServiceDiscoveryURL += "/"
 	}
 
+	protocEndIdx := strings.Index(rsd.remoteServiceDiscoveryURL, "://")
+	if protocEndIdx == -1 {
+		rsd.protoc = "http"
+	} else {
+		rsd.protoc = rsd.remoteServiceDiscoveryURL[:protocEndIdx]
+	}
+
 	return rsd, nil
 }
 
@@ -68,7 +78,7 @@ func (r *RemoteResolverBuilder) NewResolver(target string) (EndpointsResolver, e
 
 	req, err := http.NewRequest(
 		http.MethodGet,
-		r.remoteServiceDiscoveryURL+target,
+		r.protoc+"://"+r.remoteServiceDiscoveryURL+"v1/endpoints/"+target,
 		nil)
 	if err != nil {
 		return EndpointsResolver{}, errors.Wrap(err, "error creating http request")
