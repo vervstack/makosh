@@ -6,7 +6,8 @@ package app
 import (
 	"github.com/godverv/makosh/internal/store"
 	"github.com/godverv/makosh/internal/store/in_memory"
-	makosh_be_impl "github.com/godverv/makosh/internal/transport/makosh_be"
+	"github.com/godverv/makosh/internal/transport/makosh_be_impl"
+	docs "github.com/godverv/makosh/pkg/docs/api"
 )
 
 type Custom struct {
@@ -14,12 +15,12 @@ type Custom struct {
 }
 
 func (c *Custom) Init(a *App) error {
-	// Repository, Service logic, transport registration happens here
 	c.store = in_memory.New()
 
 	imp := makosh_be_impl.New(a.Cfg, c.store)
 
 	a.ServerMaster.AddImplementation(imp)
+	a.ServerMaster.AddHttpHandler(docs.Swagger())
 
 	return nil
 }
