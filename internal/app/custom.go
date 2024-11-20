@@ -6,7 +6,7 @@ package app
 import (
 	"github.com/godverv/makosh/internal/store"
 	"github.com/godverv/makosh/internal/store/in_memory"
-	"github.com/godverv/makosh/internal/transport/grpc/makosh"
+	makosh_be_impl "github.com/godverv/makosh/internal/transport/makosh_be"
 )
 
 type Custom struct {
@@ -17,9 +17,9 @@ func (c *Custom) Init(a *App) error {
 	// Repository, Service logic, transport registration happens here
 	c.store = in_memory.New()
 
-	imp := makosh.New(a.Cfg, c.store)
+	imp := makosh_be_impl.New(a.Cfg, c.store)
 
-	a.Server.AddGrpcServer(imp)
+	a.ServerMaster.AddImplementation(imp)
 
 	return nil
 }

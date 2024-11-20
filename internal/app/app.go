@@ -3,13 +3,15 @@
 package app
 
 import (
+	"context"
 	"github.com/Red-Sock/toolbox"
 	"github.com/Red-Sock/toolbox/closer"
 	errors "github.com/Red-Sock/trace-errors"
-	"github.com/godverv/makosh/internal/config"
 	"github.com/godverv/makosh/internal/transport"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
+	"golang.org/x/sync/errgroup"
+
+	"github.com/godverv/makosh/internal/config"
 )
 
 type App struct {
@@ -17,7 +19,7 @@ type App struct {
 	Stop func()
 	Cfg  config.Config
 	/* Servers managers */
-	Server *transport.ServersManager
+	ServerMaster *transport.ServersManager
 
 	Custom Custom
 }
@@ -44,13 +46,37 @@ func New() (app App, err error) {
 }
 
 func (a *App) Start() (err error) {
-	err = a.Server.Start()
-	if err != nil {
-		return errors.Wrap(err, "error starting Server manager")
-	}
-	closer.Add(func() error { return a.Server.Stop() })
-	toolbox.WaitForInterrupt()
+	var eg *errgroup.Group
+	eg, a.Ctx = errgroup.WithContext(a.Ctx)
+	eg.Go(a.ServerMaster.Start)
+	closer.Add(func() error { return a.ServerMaster.Stop() })
 
+	interaptedC := func() chan struct{} {
+		c := make(chan struct{})
+		go func() {
+			toolbox.WaitForInterrupt()
+			close(c)
+		}()
+
+		return c
+	}()
+
+	errC := func() chan error {
+		c := make(chan error)
+		go func() {
+			c <- eg.Wait()
+			close(c)
+			return
+		}()
+		return c
+	}()
+
+	select {
+	case err := <-errC:
+		logrus.Println("error during application startup: ", err)
+	case <-interaptedC:
+		logrus.Println("received interrupt signal")
+	}
 	logrus.Println("shutting down the app")
 
 	err = closer.Close()
