@@ -1,6 +1,6 @@
 app_info:
     name: github.com/godverv/makosh
-    version: v0.0.8
+    version: v0.0.9
     startup_duration: 10s
 servers:
     8080:
