@@ -141,7 +141,7 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/v1/version"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/api/version"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -166,7 +166,7 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/v1/endpoints/{service_name}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/{service_name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -191,7 +191,7 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/v1/endpoints"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/api/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -255,7 +255,7 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/v1/version"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/api/version"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -277,7 +277,7 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/v1/endpoints/{service_name}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/{service_name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -299,7 +299,7 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/v1/endpoints"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/api/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -319,11 +319,11 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_MakoshBeAPI_Version_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "version"}, ""))
+	pattern_MakoshBeAPI_Version_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "version"}, ""))
 
-	pattern_MakoshBeAPI_ListEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "endpoints", "service_name"}, ""))
+	pattern_MakoshBeAPI_ListEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "endpoints", "service_name"}, ""))
 
-	pattern_MakoshBeAPI_UpsertEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "endpoints"}, ""))
+	pattern_MakoshBeAPI_UpsertEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "endpoints"}, ""))
 )
 
 var (

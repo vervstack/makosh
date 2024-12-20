@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/endpoints": {
+    "/api/endpoints": {
       "post": {
         "operationId": "makoshBeAPI_UpsertEndpoints",
         "responses": {
@@ -48,7 +48,7 @@
         ]
       }
     },
-    "/v1/endpoints/{serviceName}": {
+    "/api/endpoints/{serviceName}": {
       "get": {
         "operationId": "makoshBeAPI_ListEndpoints",
         "responses": {
@@ -78,7 +78,7 @@
         ]
       }
     },
-    "/v1/version": {
+    "/api/version": {
       "get": {
         "operationId": "makoshBeAPI_Version",
         "responses": {

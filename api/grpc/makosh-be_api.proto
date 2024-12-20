@@ -9,19 +9,19 @@ option go_package = "/makosh_be";
 service makoshBeAPI {
   rpc Version(Version.Request) returns (Version.Response) {
     option (google.api.http) = {
-      get: "/v1/version"
+      get: "/api/version"
     };
   };
 
   rpc ListEndpoints(ListEndpoints.Request) returns (ListEndpoints.Response) {
     option (google.api.http) = {
-      get: "/v1/endpoints/{service_name}"
+      get: "/api/endpoints/{service_name}"
     };
   };
 
   rpc UpsertEndpoints(UpsertEndpoints.Request) returns (UpsertEndpoints.Response) {
     option (google.api.http) = {
-      post: "/v1/endpoints"
+      post: "/api/endpoints"
       body: "*"
     };
   }

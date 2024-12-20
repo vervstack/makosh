@@ -41,12 +41,12 @@ export type UpsertEndpoints = Record<string, never>;
 
 export class makoshBeAPI {
   static Version(this:void, req: VersionRequest, initReq?: fm.InitReq): Promise<VersionResponse> {
-    return fm.fetchRequest<VersionResponse>(`/v1/version?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"});
+    return fm.fetchRequest<VersionResponse>(`/api/version?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"});
   }
   static ListEndpoints(this:void, req: ListEndpointsRequest, initReq?: fm.InitReq): Promise<ListEndpointsResponse> {
-    return fm.fetchRequest<ListEndpointsResponse>(`/v1/endpoints/${req.serviceName}?${fm.renderURLSearchParams(req, ["serviceName"])}`, {...initReq, method: "GET"});
+    return fm.fetchRequest<ListEndpointsResponse>(`/api/endpoints/${req.serviceName}?${fm.renderURLSearchParams(req, ["serviceName"])}`, {...initReq, method: "GET"});
   }
   static UpsertEndpoints(this:void, req: UpsertEndpointsRequest, initReq?: fm.InitReq): Promise<UpsertEndpointsResponse> {
-    return fm.fetchRequest<UpsertEndpointsResponse>(`/v1/endpoints`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)});
+    return fm.fetchRequest<UpsertEndpointsResponse>(`/api/endpoints`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)});
   }
 }
