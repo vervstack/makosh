@@ -1,0 +1,182 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "makosh-be_api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MakoshBeAPI"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/endpoints": {
+      "post": {
+        "operationId": "MakoshBeAPI_UpsertEndpoints",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiUpsertEndpointsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiUpsertEndpointsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MakoshBeAPI"
+        ]
+      }
+    },
+    "/api/endpoints/{serviceName}": {
+      "get": {
+        "operationId": "MakoshBeAPI_ListEndpoints",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiListEndpointsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "serviceName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MakoshBeAPI"
+        ]
+      }
+    },
+    "/api/version": {
+      "get": {
+        "operationId": "MakoshBeAPI_Version",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/makosh_be_apiVersionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "MakoshBeAPI"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "makosh_be_apiEndpoint": {
+      "type": "object",
+      "properties": {
+        "serviceName": {
+          "type": "string"
+        },
+        "addrs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "makosh_be_apiListEndpointsResponse": {
+      "type": "object",
+      "properties": {
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "makosh_be_apiUpsertEndpointsRequest": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/makosh_be_apiEndpoint"
+          }
+        }
+      }
+    },
+    "makosh_be_apiUpsertEndpointsResponse": {
+      "type": "object"
+    },
+    "makosh_be_apiVersionResponse": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
