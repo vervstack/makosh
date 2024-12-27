@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.28.3
-// source: api/grpc/makosh-be_api.proto
+// source: makosh-be_api.proto
 
 package makosh_be
 
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MakoshBeAPI_Version_FullMethodName         = "/makosh_be_api.makoshBeAPI/Version"
-	MakoshBeAPI_ListEndpoints_FullMethodName   = "/makosh_be_api.makoshBeAPI/ListEndpoints"
-	MakoshBeAPI_UpsertEndpoints_FullMethodName = "/makosh_be_api.makoshBeAPI/UpsertEndpoints"
+	MakoshBeAPI_Version_FullMethodName         = "/makosh_be_api.MakoshBeAPI/Version"
+	MakoshBeAPI_ListEndpoints_FullMethodName   = "/makosh_be_api.MakoshBeAPI/ListEndpoints"
+	MakoshBeAPI_UpsertEndpoints_FullMethodName = "/makosh_be_api.MakoshBeAPI/UpsertEndpoints"
 )
 
 // MakoshBeAPIClient is the client API for MakoshBeAPI service.
@@ -162,7 +162,7 @@ func _MakoshBeAPI_UpsertEndpoints_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MakoshBeAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "makosh_be_api.makoshBeAPI",
+	ServiceName: "makosh_be_api.MakoshBeAPI",
 	HandlerType: (*MakoshBeAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -179,5 +179,5 @@ var MakoshBeAPI_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/grpc/makosh-be_api.proto",
+	Metadata: "makosh-be_api.proto",
 }

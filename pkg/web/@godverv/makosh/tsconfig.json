@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es6",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "include": [
+    "index.ts",
+    "fetch.pb.ts",
+    "makosh-be_api.pb.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

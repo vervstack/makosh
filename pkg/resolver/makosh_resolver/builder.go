@@ -78,7 +78,7 @@ func (r *RemoteResolverBuilder) NewResolver(target string) (EndpointsResolver, e
 
 	req, err := http.NewRequest(
 		http.MethodGet,
-		r.protoc+"://"+r.remoteServiceDiscoveryURL+"v1/endpoints/"+target,
+		r.protoc+"://"+r.remoteServiceDiscoveryURL+"api/endpoints/"+target,
 		nil)
 	if err != nil {
 		return EndpointsResolver{}, errors.Wrap(err, "error creating http request")

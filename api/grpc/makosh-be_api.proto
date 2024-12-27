@@ -3,10 +3,12 @@ syntax = "proto3";
 package makosh_be_api;
 
 import "google/api/annotations.proto";
+import "npm.proto";
 
 option go_package = "/makosh_be";
+option (npm_package) = "@godverv/makosh";
 
-service makoshBeAPI {
+service MakoshBeAPI {
   rpc Version(Version.Request) returns (Version.Response) {
     option (google.api.http) = {
       get: "/api/version"

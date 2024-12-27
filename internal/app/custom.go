@@ -7,7 +7,7 @@ import (
 	"github.com/godverv/makosh/internal/store"
 	"github.com/godverv/makosh/internal/store/in_memory"
 	"github.com/godverv/makosh/internal/transport/makosh_be_impl"
-	docs "github.com/godverv/makosh/pkg/docs/api"
+	"github.com/godverv/makosh/pkg/docs"
 )
 
 type Custom struct {
