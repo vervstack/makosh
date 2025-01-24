@@ -5,6 +5,7 @@ import (
 	"sync/atomic"
 
 	errors "github.com/Red-Sock/trace-errors"
+	"go.verv.tech/matreshka/service_discovery"
 
 	"github.com/godverv/makosh/pkg/resolver/grpc"
 	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
@@ -45,41 +46,24 @@ func NewLocalServiceDiscovery(opts ...opt) (*ServiceDiscovery, error) {
 	return b, nil
 }
 
-func (b *ServiceDiscovery) SetCustomResolver(
-	newResolver makosh_resolver.Resolver, serviceNames ...string) error {
-	b.m.Lock()
-	defer b.m.Unlock()
-
-	for _, serviceName := range serviceNames {
-		rPtr := b.resolvers[serviceName]
-		if rPtr == nil {
-			rPtr = &atomic.Pointer[makosh_resolver.EndpointsResolver]{}
-			b.resolvers[serviceName] = rPtr
-		} else {
-			oldResolver := *rPtr.Load()
-			newResolver.AddSubscribers(oldResolver.GetSubscribers()...)
-		}
-
-		rPtr.Store(&makosh_resolver.EndpointsResolver{Resolver: newResolver})
-	}
-
-	return nil
+func (sd *ServiceDiscovery) SetCustomResolver(newResolver makosh_resolver.Resolver, serviceName string) {
+	sd.setCustomResolver(newResolver, serviceName)
 }
 
-func (b *ServiceDiscovery) GrpcBuilder() *grpc.Builder {
-	return grpc.NewBuilder(b, b.schema)
+func (sd *ServiceDiscovery) GrpcBuilder() *grpc.Builder {
+	return grpc.NewBuilder(sd, sd.schema)
 }
 
-func (b *ServiceDiscovery) GetResolver(target string) (*atomic.Pointer[makosh_resolver.EndpointsResolver], error) {
-	b.m.Lock()
-	defer b.m.Unlock()
+func (sd *ServiceDiscovery) GetResolver(target string) (*atomic.Pointer[makosh_resolver.EndpointsResolver], error) {
+	sd.m.Lock()
+	defer sd.m.Unlock()
 
-	rPtr := b.resolvers[target]
+	rPtr := sd.resolvers[target]
 	if rPtr != nil {
 		return rPtr, nil
 	}
 
-	r, err := b.resolverBuilder.NewResolver(target)
+	r, err := sd.resolverBuilder.NewResolver(target)
 	if err != nil {
 		return nil, errors.Wrap(err, "error building resolver")
 	}
@@ -87,7 +71,30 @@ func (b *ServiceDiscovery) GetResolver(target string) (*atomic.Pointer[makosh_re
 	rPtr = &atomic.Pointer[makosh_resolver.EndpointsResolver]{}
 	rPtr.Store(&r)
 
-	b.resolvers[target] = rPtr
+	sd.resolvers[target] = rPtr
 
 	return rPtr, nil
+}
+
+func (sd *ServiceDiscovery) SetOverrides(overrides service_discovery.Overrides) {
+	for _, o := range overrides {
+		resolver := makosh_resolver.NewStaticResolver(o.Urls...)
+		sd.setCustomResolver(resolver, o.ServiceName)
+	}
+}
+
+func (sd *ServiceDiscovery) setCustomResolver(newResolver makosh_resolver.Resolver, serviceName string) {
+	sd.m.Lock()
+	defer sd.m.Unlock()
+
+	rPtr := sd.resolvers[serviceName]
+	if rPtr == nil {
+		rPtr = &atomic.Pointer[makosh_resolver.EndpointsResolver]{}
+		sd.resolvers[serviceName] = rPtr
+	} else {
+		oldResolver := *rPtr.Load()
+		newResolver.AddSubscribers(oldResolver.GetSubscribers()...)
+	}
+
+	rPtr.Store(&makosh_resolver.EndpointsResolver{Resolver: newResolver})
 }
