@@ -3,9 +3,11 @@ app_info:
     version: 0.0.1
     startup_duration: 10s
 data_sources: []
-server:
-    - name: grpc
-      port: 1001
+servers:
+    8080:
+        /{GRPC}:
+            module: pkg/makosh_be
+            gateway: /api
 environment:
     - name: auth_token
       type: string

@@ -5,12 +5,12 @@ import (
 )
 
 type StaticResolver struct {
-	EndpointsContainer
+	*EndpointsContainer
 }
 
 func NewStaticResolver(addrs ...string) *StaticResolver {
 	return &StaticResolver{
-		EndpointsContainer{
+		&EndpointsContainer{
 			addrsCache: addrs,
 		},
 	}

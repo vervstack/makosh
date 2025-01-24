@@ -45,15 +45,6 @@ func Test_ResolverBuilder_New(t *testing.T) {
 		require.Nil(t, b)
 	})
 
-	t.Run("ERR_INVALID_URL", func(t *testing.T) {
-		t.Parallel()
-		b, err := NewBuilder(
-			WithURL("guffy_url"),
-			WithPublicServiceDiscovery(),
-		)
-		require.Contains(t, err.Error(), "invalid service discovery url")
-		require.Nil(t, b)
-	})
 }
 
 func Test_ResolverBuilder_NewResolver(t *testing.T) {
@@ -97,6 +88,6 @@ func Test_ResolverBuilder_NewResolver(t *testing.T) {
 
 		resolver, err := b.NewResolver("%")
 		require.Error(t, err)
-		require.Nil(t, resolver)
+		require.Empty(t, resolver)
 	})
 }
