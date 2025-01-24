@@ -3,7 +3,7 @@
 package config
 
 import (
-	"github.com/godverv/matreshka/server"
+	"go.verv.tech/matreshka/server"
 )
 
 type ServersConfig struct {

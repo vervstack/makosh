@@ -6,7 +6,7 @@ import (
 	"flag"
 
 	errors "github.com/Red-Sock/trace-errors"
-	"github.com/godverv/matreshka"
+	"go.verv.tech/matreshka"
 )
 
 var ErrAlreadyLoaded = errors.New("config already loaded")

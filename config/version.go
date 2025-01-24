@@ -3,7 +3,7 @@ package version
 import (
 	_ "embed"
 
-	"github.com/godverv/matreshka"
+	"go.verv.tech/matreshka"
 )
 
 //go:embed config.yaml
@@ -20,6 +20,6 @@ func init() {
 	version = cfg.Version
 }
 
-func Version() string {
+func GetVersion() string {
 	return version
 }
