@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 
 	errors "github.com/Red-Sock/trace-errors"
-	"go.verv.tech/matreshka/service_discovery"
+	"go.vervstack.ru/matreshka/service_discovery"
 
 	"github.com/godverv/makosh/pkg/resolver/grpc"
 	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"

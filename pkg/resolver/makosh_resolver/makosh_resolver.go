@@ -47,7 +47,7 @@ func (r *MakoshResolver) fetchEndpoints() error {
 
 	resp, err := http.DefaultClient.Do(r.req)
 	if err != nil {
-		return errors.Wrap(err, "error getting ")
+		return errors.Wrap(err, "error getting response via http request")
 	}
 
 	body, err := io.ReadAll(resp.Body)

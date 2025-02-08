@@ -20,9 +20,9 @@ import (
 )
 
 const (
-	grpcMakoshEndpoint = "0.0.0.0:1001"
-	httpMakoshEndpoint = "http://" + grpcMakoshEndpoint + "/v1/endpoints/"
-	makoshSecret       = "makosh_secret"
+	makoshEndpoint = "0.0.0.0:1001"
+
+	makoshSecret = "makosh_secret"
 )
 
 const (
@@ -104,7 +104,7 @@ func initEnv() {
 }
 
 func prepareMakoshClient(ctx context.Context) (makosh_be.MakoshBeAPIClient, error) {
-	dial, err := grpc.NewClient(grpcMakoshEndpoint,
+	dial, err := grpc.NewClient(makoshEndpoint,
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, errors.Wrap(err, "error connecting to makosh")

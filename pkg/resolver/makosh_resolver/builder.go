@@ -64,6 +64,7 @@ func NewBuilder(opts ...opt) (*RemoteResolverBuilder, error) {
 		rsd.protoc = "http"
 	} else {
 		rsd.protoc = rsd.remoteServiceDiscoveryURL[:protocEndIdx]
+		rsd.remoteServiceDiscoveryURL = rsd.remoteServiceDiscoveryURL[protocEndIdx+3:]
 	}
 
 	return rsd, nil

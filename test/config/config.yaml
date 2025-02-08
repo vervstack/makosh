@@ -4,7 +4,7 @@ app_info:
     startup_duration: 10s
 data_sources: []
 servers:
-    8080:
+    1001:
         /{GRPC}:
             module: pkg/makosh_be
             gateway: /api

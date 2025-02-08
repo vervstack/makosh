@@ -10,9 +10,9 @@ require (
 	github.com/rs/cors v1.11.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/soheilhy/cmux v0.1.5
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	go.redsock.ru/protoc-gen-npm v0.0.10
-	go.verv.tech/matreshka v0.0.45
+	go.vervstack.ru/matreshka v0.0.53
 	golang.org/x/sync v0.9.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241118233622-e639e219e697
 	google.golang.org/grpc v1.69.0
@@ -24,9 +24,9 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
-	go.redsock.ru/evon v0.0.16 // indirect
+	go.redsock.ru/evon v0.0.17 // indirect
 	go.redsock.ru/rerrors v0.0.3 // indirect
-	go.redsock.ru/toolbox v0.0.9 // indirect
+	go.redsock.ru/toolbox v0.0.10 // indirect
 	golang.org/x/net v0.31.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect

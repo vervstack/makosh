@@ -29,7 +29,7 @@ func Test_Resolving(t *testing.T) {
 
 	testCases := map[string]testCase{
 		"OK": {
-			makoshEndPoint: httpMakoshEndpoint,
+			makoshEndPoint: makoshEndpoint,
 			makoshSecret:   makoshSecret,
 			targetName:     testService1,
 			getUpdaterAndResult: func() (updateFunc func([]string) error, resultSlice *[]string) {
@@ -42,7 +42,7 @@ func Test_Resolving(t *testing.T) {
 			expectedResult: examples[0].Addrs,
 		},
 		"INVALID_AUTH_ERROR": {
-			makoshEndPoint: httpMakoshEndpoint,
+			makoshEndPoint: makoshEndpoint,
 			makoshSecret:   "fake_secret",
 			targetName:     testService1,
 			getUpdaterAndResult: func() (updateFunc func([]string) error, resultSlice *[]string) {
