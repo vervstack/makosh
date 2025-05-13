@@ -4,10 +4,13 @@
 package app
 
 import (
-	"github.com/godverv/makosh/internal/store"
-	"github.com/godverv/makosh/internal/store/in_memory"
-	"github.com/godverv/makosh/internal/transport/makosh_be_impl"
-	"github.com/godverv/makosh/pkg/docs"
+	"google.golang.org/grpc"
+
+	"go.vervstack.ru/makosh/internal/interceptors"
+	"go.vervstack.ru/makosh/internal/store"
+	"go.vervstack.ru/makosh/internal/store/in_memory"
+	"go.vervstack.ru/makosh/internal/transport/makosh_be_impl"
+	"go.vervstack.ru/makosh/pkg/docs"
 )
 
 type Custom struct {
@@ -19,7 +22,13 @@ func (c *Custom) Init(a *App) error {
 
 	imp := makosh_be_impl.New(a.Cfg, c.store)
 
-	a.ServerMaster.AddImplementation(imp)
+	var opts []grpc.ServerOption
+
+	if !a.Cfg.Environment.DisableSecurity {
+		opts = append(opts, interceptors.GrpcAuthInterceptor(a.Cfg.Environment.AuthToken))
+	}
+
+	a.ServerMaster.AddImplementation(imp, opts...)
 	a.ServerMaster.AddHttpHandler(docs.Swagger())
 
 	return nil

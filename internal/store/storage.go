@@ -3,7 +3,7 @@ package store
 import (
 	"context"
 
-	"github.com/godverv/makosh/internal/domain"
+	"go.vervstack.ru/makosh/internal/domain"
 )
 
 type EndpointsStorage interface {

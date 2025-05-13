@@ -3,7 +3,7 @@ package version
 import (
 	_ "embed"
 
-	"go.vervstack.ru/matreshka"
+	"go.vervstack.ru/matreshka/pkg/matreshka"
 )
 
 //go:embed config.yaml

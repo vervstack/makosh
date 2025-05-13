@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/godverv/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/pkg/makosh_be"
 )
 
 func Test_Resolver(t *testing.T) {

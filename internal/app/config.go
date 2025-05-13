@@ -5,10 +5,10 @@ package app
 import (
 	"context"
 
-	"github.com/Red-Sock/toolbox/closer"
 	errors "github.com/Red-Sock/trace-errors"
+	"go.redsock.ru/toolbox/closer"
 
-	"github.com/godverv/makosh/internal/config"
+	"go.vervstack.ru/makosh/internal/config"
 )
 
 func (a *App) InitConfig() (err error) {

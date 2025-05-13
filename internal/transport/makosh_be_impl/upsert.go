@@ -5,8 +5,8 @@ import (
 
 	errors "github.com/Red-Sock/trace-errors"
 
-	"github.com/godverv/makosh/internal/domain"
-	"github.com/godverv/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/internal/domain"
+	"go.vervstack.ru/makosh/pkg/makosh_be"
 )
 
 func (impl *Impl) UpsertEndpoints(ctx context.Context, req *makosh_be.UpsertEndpoints_Request,

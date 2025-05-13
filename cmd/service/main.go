@@ -5,7 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/godverv/makosh/internal/app"
+	"go.vervstack.ru/makosh/internal/app"
 )
 
 func main() {

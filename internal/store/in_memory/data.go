@@ -3,7 +3,7 @@ package in_memory
 import (
 	"sync"
 
-	"github.com/godverv/makosh/internal/domain"
+	"go.vervstack.ru/makosh/internal/domain"
 )
 
 type InMemoryDb struct {

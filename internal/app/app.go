@@ -4,14 +4,14 @@ package app
 
 import (
 	"context"
-	"github.com/Red-Sock/toolbox"
-	"github.com/Red-Sock/toolbox/closer"
 	errors "github.com/Red-Sock/trace-errors"
-	"github.com/godverv/makosh/internal/transport"
-	"github.com/sirupsen/logrus"
+	"github.com/
+	"go.redsock.ru/toolbox"
+	"go.redsock.ru/toolbox/closer"
+	"go.vervstack.ru/makosh/internal/transport"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/godverv/makosh/internal/config"
+	"go.vervstack.ru/makosh/internal/config"
 )
 
 type App struct {

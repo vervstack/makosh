@@ -13,10 +13,10 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/godverv/makosh/internal/app"
-	"github.com/godverv/makosh/internal/domain"
-	"github.com/godverv/makosh/internal/interceptors"
-	"github.com/godverv/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/internal/app"
+	"go.vervstack.ru/makosh/internal/domain"
+	"go.vervstack.ru/makosh/internal/interceptors"
+	"go.vervstack.ru/makosh/pkg/makosh_be"
 )
 
 const (

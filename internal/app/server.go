@@ -4,7 +4,7 @@ package app
 
 import (
 	errors "github.com/Red-Sock/trace-errors"
-	"github.com/godverv/makosh/internal/transport"
+	"go.vervstack.ru/makosh/internal/transport"
 )
 
 func (a *App) InitServers() (err error) {

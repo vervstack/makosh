@@ -5,10 +5,10 @@ import (
 	"sync/atomic"
 
 	errors "github.com/Red-Sock/trace-errors"
-	"go.vervstack.ru/matreshka/service_discovery"
+	"go.vervstack.ru/matreshka/pkg/matreshka/service_discovery"
 
-	"github.com/godverv/makosh/pkg/resolver/grpc"
-	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
+	"go.vervstack.ru/makosh/pkg/resolver/grpc"
+	"go.vervstack.ru/makosh/pkg/resolver/makosh_resolver"
 )
 
 const DefaultSchema = "verv"

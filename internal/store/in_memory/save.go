@@ -3,7 +3,7 @@ package in_memory
 import (
 	"context"
 
-	"github.com/godverv/makosh/internal/domain"
+	"go.vervstack.ru/makosh/internal/domain"
 )
 
 func (d *InMemoryDb) Save(_ context.Context, endpoints ...domain.Endpoint) error {

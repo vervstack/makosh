@@ -1,15 +1,15 @@
 package test
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
-	"github.com/godverv/makosh/internal/interceptors"
-	"github.com/godverv/makosh/pkg/resolver"
-	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
+	"go.vervstack.ru/makosh/internal/interceptors"
+	"go.vervstack.ru/makosh/pkg/resolver"
+	"go.vervstack.ru/makosh/pkg/resolver/makosh_resolver"
 )
 
 func Test_Resolving(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_Resolving(t *testing.T) {
 		getUpdaterAndResult func() (updateFunc func([]string) error, resultSlice *[]string)
 		expectedResult      []string
 		// Error for service discovery error responses
-		expectedServiceErr map[string]any
+		expectedServiceErr error
 	}
 
 	testCases := map[string]testCase{
@@ -52,11 +52,8 @@ func Test_Resolving(t *testing.T) {
 					return nil
 				}, resultSlice
 			},
-			expectedResult: []string{},
-			expectedServiceErr: map[string]any{
-				"code":    float64(codes.PermissionDenied),
-				"message": interceptors.InvalidAuthErrMessage,
-			},
+			expectedResult:     []string{},
+			expectedServiceErr: status.Error(codes.PermissionDenied, interceptors.InvalidAuthErrMessage),
 		},
 	}
 
@@ -77,18 +74,16 @@ func Test_Resolving(t *testing.T) {
 			updaterCallback, result := test.getUpdaterAndResult()
 			resolverPtr, err := resolverBuilder.GetResolver(test.targetName)
 			require.NoError(t, err)
-			resolver := *resolverPtr.Load()
-			resolver.AddSubscribers(updaterCallback)
+			rslvr := *resolverPtr.Load()
+			rslvr.AddSubscribers(updaterCallback)
 
-			err = resolver.Resolve()
+			err = rslvr.Resolve()
 			if test.expectedServiceErr == nil {
 				require.NoError(t, err)
 			} else {
-				m := make(map[string]any)
-				marshErr := json.Unmarshal([]byte(err.Error()), &m)
-				require.NoError(t, marshErr)
+				require.Error(t, err)
 
-				require.Equal(t, test.expectedServiceErr, m)
+				require.ErrorIs(t, err, test.expectedServiceErr)
 			}
 
 			require.Equal(t, *result, test.expectedResult)

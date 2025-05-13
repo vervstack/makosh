@@ -7,7 +7,7 @@ import (
 
 	errors "github.com/Red-Sock/trace-errors"
 
-	"github.com/godverv/makosh/internal/interceptors"
+	"go.vervstack.ru/makosh/internal/interceptors"
 )
 
 const (

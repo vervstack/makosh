@@ -6,8 +6,11 @@ import (
 	"net/http"
 
 	errors "github.com/Red-Sock/trace-errors"
+	statuspb "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
-	"github.com/godverv/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/pkg/makosh_be"
 )
 
 type MakoshResolver struct {
@@ -56,7 +59,13 @@ func (r *MakoshResolver) fetchEndpoints() error {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(string(body))
+		st := &statuspb.Status{}
+		if json.Unmarshal(body, st) != nil {
+			return errors.New(string(body))
+		} else {
+			return errors.Wrap(status.Error(codes.Code(st.Code), st.Message))
+		}
+
 	}
 
 	var endpointsResponse makosh_be.ListEndpoints_Response

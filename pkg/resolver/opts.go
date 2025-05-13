@@ -1,7 +1,7 @@
 package resolver
 
 import (
-	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
+	"go.vervstack.ru/makosh/pkg/resolver/makosh_resolver"
 )
 
 func WithSchema(schemaName string) opt {

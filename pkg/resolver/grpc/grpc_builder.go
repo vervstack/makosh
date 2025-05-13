@@ -6,7 +6,7 @@ import (
 	errors "github.com/Red-Sock/trace-errors"
 	"google.golang.org/grpc/resolver"
 
-	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
+	"go.vervstack.ru/makosh/pkg/resolver/makosh_resolver"
 )
 
 type serviceDiscovery interface {

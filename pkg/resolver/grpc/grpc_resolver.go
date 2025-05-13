@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/grpc/resolver"
 
-	"github.com/godverv/makosh/pkg/resolver/makosh_resolver"
+	"go.vervstack.ru/makosh/pkg/resolver/makosh_resolver"
 )
 
 type Resolver struct {

@@ -8,9 +8,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
-	"github.com/godverv/makosh/internal/config"
-	"github.com/godverv/makosh/internal/store"
-	"github.com/godverv/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/internal/config"
+	"go.vervstack.ru/makosh/internal/store"
+	"go.vervstack.ru/makosh/pkg/makosh_be"
 )
 
 type Impl struct {
