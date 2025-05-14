@@ -4,12 +4,14 @@ package app
 
 import (
 	"context"
+
 	errors "github.com/Red-Sock/trace-errors"
-	"github.com/
+	"github.com/sirupsen/logrus"
 	"go.redsock.ru/toolbox"
 	"go.redsock.ru/toolbox/closer"
-	"go.vervstack.ru/makosh/internal/transport"
 	"golang.org/x/sync/errgroup"
+
+	"go.vervstack.ru/makosh/internal/transport"
 
 	"go.vervstack.ru/makosh/internal/config"
 )
