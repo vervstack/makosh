@@ -4,6 +4,8 @@
 package app
 
 import (
+	"context"
+
 	"google.golang.org/grpc"
 
 	"go.vervstack.ru/makosh/internal/interceptors"
@@ -28,8 +30,18 @@ func (c *Custom) Init(a *App) error {
 		opts = append(opts, interceptors.GrpcAuthInterceptor(a.Cfg.Environment.AuthToken))
 	}
 
-	a.ServerMaster.AddImplementation(imp, opts...)
+	a.ServerMaster.AddImplementation(imp)
+	a.ServerMaster.AddServerOption(opts...)
+
 	a.ServerMaster.AddHttpHandler(docs.Swagger())
 
+	return nil
+}
+
+func (c *Custom) Start(ctx context.Context) error {
+	return nil
+}
+
+func (c *Custom) Stop() error {
 	return nil
 }
