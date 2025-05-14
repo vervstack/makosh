@@ -4,14 +4,12 @@ package app
 
 import (
 	"context"
-
-	errors "github.com/Red-Sock/trace-errors"
 	"github.com/sirupsen/logrus"
+	"go.redsock.ru/rerrors"
 	"go.redsock.ru/toolbox"
 	"go.redsock.ru/toolbox/closer"
-	"golang.org/x/sync/errgroup"
-
 	"go.vervstack.ru/makosh/internal/transport"
+	"golang.org/x/sync/errgroup"
 
 	"go.vervstack.ru/makosh/internal/config"
 )
@@ -31,17 +29,17 @@ func New() (app App, err error) {
 
 	err = app.InitConfig()
 	if err != nil {
-		return App{}, errors.Wrap(err, "error initializing config")
+		return App{}, rerrors.Wrap(err, "error initializing config")
 	}
 
 	err = app.InitServers()
 	if err != nil {
-		return App{}, errors.Wrap(err, "error during server initialization")
+		return App{}, rerrors.Wrap(err, "error during server initialization")
 	}
 
 	err = app.Custom.Init(&app)
 	if err != nil {
-		return App{}, errors.Wrap(err, "error initializing custom app properties")
+		return App{}, rerrors.Wrap(err, "error initializing custom app properties")
 	}
 
 	return app, nil
@@ -52,6 +50,11 @@ func (a *App) Start() (err error) {
 	eg, a.Ctx = errgroup.WithContext(a.Ctx)
 	eg.Go(a.ServerMaster.Start)
 	closer.Add(func() error { return a.ServerMaster.Stop() })
+
+	eg.Go(func() error {
+		return a.Custom.Start(a.Ctx)
+	})
+	closer.Add(a.Custom.Stop)
 
 	interaptedC := func() chan struct{} {
 		c := make(chan struct{})
@@ -83,7 +86,7 @@ func (a *App) Start() (err error) {
 
 	err = closer.Close()
 	if err != nil {
-		return errors.Wrap(err, "error while shutting down application")
+		return rerrors.Wrap(err, "error while shutting down application")
 	}
 
 	return nil

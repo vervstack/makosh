@@ -5,17 +5,18 @@ package config
 import (
 	"flag"
 
-	errors "github.com/Red-Sock/trace-errors"
+	"go.redsock.ru/rerrors"
 	"go.vervstack.ru/matreshka/pkg/matreshka"
 )
 
-var ErrAlreadyLoaded = errors.New("config already loaded")
+var ErrAlreadyLoaded = rerrors.New("config already loaded")
 
 type Config struct {
 	AppInfo matreshka.AppInfo
 
 	Servers     ServersConfig
 	Environment EnvironmentConfig
+	Overrides   matreshka.ServiceDiscovery
 }
 
 var defaultConfig Config
@@ -47,18 +48,19 @@ func Load() (Config, error) {
 
 	rootConfig, err := matreshka.ReadConfigs(cfgPath)
 	if err != nil {
-		return defaultConfig, errors.Wrap(err, "error reading matreshka config")
+		return defaultConfig, rerrors.Wrap(err, "error reading matreshka config")
 	}
 
 	defaultConfig.AppInfo = rootConfig.AppInfo
+	defaultConfig.Overrides = rootConfig.ServiceDiscovery
 
 	err = rootConfig.Servers.ParseToStruct(&defaultConfig.Servers)
 	if err != nil {
-		return defaultConfig, errors.Wrap(err, "Error parsing servers to config")
+		return defaultConfig, rerrors.Wrap(err, "Error parsing servers to config")
 	}
 	err = rootConfig.Environment.ParseToStruct(&defaultConfig.Environment)
 	if err != nil {
-		return defaultConfig, errors.Wrap(err, "error parsing environment config")
+		return defaultConfig, rerrors.Wrap(err, "error parsing environment config")
 	}
 
 	return defaultConfig, nil

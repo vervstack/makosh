@@ -10,6 +10,7 @@ package makosh_be
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 
@@ -24,124 +25,109 @@ import (
 )
 
 // Suppress "imported and not used" errors
-var _ codes.Code
-var _ io.Reader
-var _ status.Status
-var _ = runtime.String
-var _ = utilities.NewDoubleArray
-var _ = metadata.Join
+var (
+	_ codes.Code
+	_ io.Reader
+	_ status.Status
+	_ = errors.New
+	_ = runtime.String
+	_ = utilities.NewDoubleArray
+	_ = metadata.Join
+)
 
 func request_MakoshBeAPI_Version_0(ctx context.Context, marshaler runtime.Marshaler, client MakoshBeAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Version_Request
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq Version_Request
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
 	msg, err := client.Version(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_MakoshBeAPI_Version_0(ctx context.Context, marshaler runtime.Marshaler, server MakoshBeAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Version_Request
-	var metadata runtime.ServerMetadata
-
+	var (
+		protoReq Version_Request
+		metadata runtime.ServerMetadata
+	)
 	msg, err := server.Version(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_MakoshBeAPI_ListEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, client MakoshBeAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListEndpoints_Request
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListEndpoints_Request
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["service_name"]
+	io.Copy(io.Discard, req.Body)
+	val, ok := pathParams["service_name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "service_name")
 	}
-
 	protoReq.ServiceName, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_name", err)
 	}
-
 	msg, err := client.ListEndpoints(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_MakoshBeAPI_ListEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, server MakoshBeAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListEndpoints_Request
-	var metadata runtime.ServerMetadata
-
 	var (
-		val string
-		ok  bool
-		err error
-		_   = err
+		protoReq ListEndpoints_Request
+		metadata runtime.ServerMetadata
+		err      error
 	)
-
-	val, ok = pathParams["service_name"]
+	val, ok := pathParams["service_name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "service_name")
 	}
-
 	protoReq.ServiceName, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_name", err)
 	}
-
 	msg, err := server.ListEndpoints(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 func request_MakoshBeAPI_UpsertEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, client MakoshBeAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpsertEndpoints_Request
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq UpsertEndpoints_Request
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := client.UpsertEndpoints(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
-
 }
 
 func local_request_MakoshBeAPI_UpsertEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, server MakoshBeAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpsertEndpoints_Request
-	var metadata runtime.ServerMetadata
-
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	var (
+		protoReq UpsertEndpoints_Request
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
 	msg, err := server.UpsertEndpoints(ctx, &protoReq)
 	return msg, metadata, err
-
 }
 
 // RegisterMakoshBeAPIHandlerServer registers the http handlers for service MakoshBeAPI to "mux".
 // UnaryRPC     :call MakoshBeAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterMakoshBeAPIHandlerFromEndpoint instead.
+// GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server MakoshBeAPIServer) error {
-
-	mux.Handle("GET", pattern_MakoshBeAPI_Version_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_MakoshBeAPI_Version_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/api/version"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/api/version"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -153,20 +139,15 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_MakoshBeAPI_Version_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_MakoshBeAPI_ListEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_MakoshBeAPI_ListEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/{service_name}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/{service_name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -178,20 +159,15 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_MakoshBeAPI_ListEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_MakoshBeAPI_UpsertEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_MakoshBeAPI_UpsertEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/api/endpoints"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/api/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -203,9 +179,7 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_MakoshBeAPI_UpsertEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
 
 	return nil
@@ -214,25 +188,24 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 // RegisterMakoshBeAPIHandlerFromEndpoint is same as RegisterMakoshBeAPIHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterMakoshBeAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.DialContext(ctx, endpoint, opts...)
+	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		if err != nil {
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 			return
 		}
 		go func() {
 			<-ctx.Done()
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 		}()
 	}()
-
 	return RegisterMakoshBeAPIHandler(ctx, mux, conn)
 }
 
@@ -246,16 +219,13 @@ func RegisterMakoshBeAPIHandler(ctx context.Context, mux *runtime.ServeMux, conn
 // to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "MakoshBeAPIClient".
 // Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "MakoshBeAPIClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "MakoshBeAPIClient" to call the correct interceptors.
+// "MakoshBeAPIClient" to call the correct interceptors. This client ignores the HTTP middlewares.
 func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client MakoshBeAPIClient) error {
-
-	mux.Handle("GET", pattern_MakoshBeAPI_Version_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_MakoshBeAPI_Version_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/api/version"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/Version", runtime.WithHTTPPathPattern("/api/version"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -266,18 +236,13 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_MakoshBeAPI_Version_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("GET", pattern_MakoshBeAPI_ListEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_MakoshBeAPI_ListEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/{service_name}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/ListEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/{service_name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -288,18 +253,13 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_MakoshBeAPI_ListEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
-	mux.Handle("POST", pattern_MakoshBeAPI_UpsertEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_MakoshBeAPI_UpsertEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		var err error
-		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/api/endpoints"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/UpsertEndpoints", runtime.WithHTTPPathPattern("/api/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -310,26 +270,19 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-
 		forward_MakoshBeAPI_UpsertEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
 	})
-
 	return nil
 }
 
 var (
-	pattern_MakoshBeAPI_Version_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "version"}, ""))
-
-	pattern_MakoshBeAPI_ListEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "endpoints", "service_name"}, ""))
-
+	pattern_MakoshBeAPI_Version_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "version"}, ""))
+	pattern_MakoshBeAPI_ListEndpoints_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "endpoints", "service_name"}, ""))
 	pattern_MakoshBeAPI_UpsertEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "endpoints"}, ""))
 )
 
 var (
-	forward_MakoshBeAPI_Version_0 = runtime.ForwardResponseMessage
-
-	forward_MakoshBeAPI_ListEndpoints_0 = runtime.ForwardResponseMessage
-
+	forward_MakoshBeAPI_Version_0         = runtime.ForwardResponseMessage
+	forward_MakoshBeAPI_ListEndpoints_0   = runtime.ForwardResponseMessage
 	forward_MakoshBeAPI_UpsertEndpoints_0 = runtime.ForwardResponseMessage
 )
