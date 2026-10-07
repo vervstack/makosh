@@ -3,18 +3,15 @@ package makosh_be_impl
 import (
 	"context"
 
-	errors "github.com/Red-Sock/trace-errors"
-
 	"go.vervstack.ru/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/pkg/registry"
 )
 
 func (impl *Impl) ListEndpoints(ctx context.Context, req *makosh_be.ListEndpoints_Request) (*makosh_be.ListEndpoints_Response, error) {
-	endpoints, err := impl.data.Get(ctx, req.ServiceName)
+	response, err := impl.reg.List(ctx, req.GetServiceName(), req.GetScope())
 	if err != nil {
-		return nil, errors.Wrap(err, "")
+		return nil, registry.ToStatusError(err)
 	}
 
-	return &makosh_be.ListEndpoints_Response{
-		Urls: endpoints.Addrs,
-	}, nil
+	return response, nil
 }

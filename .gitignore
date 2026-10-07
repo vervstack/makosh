@@ -20,4 +20,4 @@ config/dev.yaml
 api/*
 !api/grpc
 
-proto_deps
+proto_modules

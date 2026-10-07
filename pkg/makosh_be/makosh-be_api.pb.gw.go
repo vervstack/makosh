@@ -40,7 +40,9 @@ func request_MakoshBeAPI_Version_0(ctx context.Context, marshaler runtime.Marsha
 		protoReq Version_Request
 		metadata runtime.ServerMetadata
 	)
-	io.Copy(io.Discard, req.Body)
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
 	msg, err := client.Version(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
@@ -54,13 +56,14 @@ func local_request_MakoshBeAPI_Version_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
+var filter_MakoshBeAPI_ListEndpoints_0 = &utilities.DoubleArray{Encoding: map[string]int{"service_name": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+
 func request_MakoshBeAPI_ListEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, client MakoshBeAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ListEndpoints_Request
 		metadata runtime.ServerMetadata
 		err      error
 	)
-	io.Copy(io.Discard, req.Body)
 	val, ok := pathParams["service_name"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "service_name")
@@ -68,6 +71,15 @@ func request_MakoshBeAPI_ListEndpoints_0(ctx context.Context, marshaler runtime.
 	protoReq.ServiceName, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_name", err)
+	}
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_MakoshBeAPI_ListEndpoints_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
 	}
 	msg, err := client.ListEndpoints(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -87,6 +99,12 @@ func local_request_MakoshBeAPI_ListEndpoints_0(ctx context.Context, marshaler ru
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_name", err)
 	}
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_MakoshBeAPI_ListEndpoints_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
 	msg, err := server.ListEndpoints(ctx, &protoReq)
 	return msg, metadata, err
 }
@@ -98,6 +116,9 @@ func request_MakoshBeAPI_UpsertEndpoints_0(ctx context.Context, marshaler runtim
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
 	}
 	msg, err := client.UpsertEndpoints(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -112,6 +133,33 @@ func local_request_MakoshBeAPI_UpsertEndpoints_0(ctx context.Context, marshaler 
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.UpsertEndpoints(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_MakoshBeAPI_DeleteEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, client MakoshBeAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq DeleteEndpoints_Request
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	msg, err := client.DeleteEndpoints(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_MakoshBeAPI_DeleteEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, server MakoshBeAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq DeleteEndpoints_Request
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.DeleteEndpoints(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -180,6 +228,26 @@ func RegisterMakoshBeAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 		forward_MakoshBeAPI_UpsertEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_MakoshBeAPI_DeleteEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/DeleteEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/delete"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_MakoshBeAPI_DeleteEndpoints_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_MakoshBeAPI_DeleteEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
@@ -272,6 +340,23 @@ func RegisterMakoshBeAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		}
 		forward_MakoshBeAPI_UpsertEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_MakoshBeAPI_DeleteEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/makosh_be_api.MakoshBeAPI/DeleteEndpoints", runtime.WithHTTPPathPattern("/api/endpoints/delete"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_MakoshBeAPI_DeleteEndpoints_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_MakoshBeAPI_DeleteEndpoints_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	return nil
 }
 
@@ -279,10 +364,12 @@ var (
 	pattern_MakoshBeAPI_Version_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "version"}, ""))
 	pattern_MakoshBeAPI_ListEndpoints_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "endpoints", "service_name"}, ""))
 	pattern_MakoshBeAPI_UpsertEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "endpoints"}, ""))
+	pattern_MakoshBeAPI_DeleteEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "endpoints", "delete"}, ""))
 )
 
 var (
 	forward_MakoshBeAPI_Version_0         = runtime.ForwardResponseMessage
 	forward_MakoshBeAPI_ListEndpoints_0   = runtime.ForwardResponseMessage
 	forward_MakoshBeAPI_UpsertEndpoints_0 = runtime.ForwardResponseMessage
+	forward_MakoshBeAPI_DeleteEndpoints_0 = runtime.ForwardResponseMessage
 )

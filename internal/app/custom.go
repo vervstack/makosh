@@ -9,20 +9,18 @@ import (
 	"google.golang.org/grpc"
 
 	"go.vervstack.ru/makosh/internal/interceptors"
-	"go.vervstack.ru/makosh/internal/store"
-	"go.vervstack.ru/makosh/internal/store/in_memory"
 	"go.vervstack.ru/makosh/internal/transport/makosh_be_impl"
-	"go.vervstack.ru/makosh/pkg/docs"
+	"go.vervstack.ru/makosh/pkg/registry"
 )
 
 type Custom struct {
-	store store.EndpointsStorage
+	reg *registry.Registry
 }
 
 func (c *Custom) Init(a *App) error {
-	c.store = in_memory.New()
+	c.reg = registry.New()
 
-	imp := makosh_be_impl.New(a.Cfg, c.store)
+	imp := makosh_be_impl.New(a.Cfg, c.reg)
 
 	var opts []grpc.ServerOption
 
@@ -33,7 +31,6 @@ func (c *Custom) Init(a *App) error {
 	a.ServerMaster.AddImplementation(imp)
 	a.ServerMaster.AddServerOption(opts...)
 
-	a.ServerMaster.AddHttpHandler(docs.Swagger())
 
 	return nil
 }

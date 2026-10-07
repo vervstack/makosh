@@ -9,21 +9,21 @@ import (
 	"google.golang.org/grpc"
 
 	"go.vervstack.ru/makosh/internal/config"
-	"go.vervstack.ru/makosh/internal/store"
 	"go.vervstack.ru/makosh/pkg/makosh_be"
+	"go.vervstack.ru/makosh/pkg/registry"
 )
 
 type Impl struct {
 	makosh_be.UnimplementedMakoshBeAPIServer
 
 	version string
-	data    store.EndpointsStorage
+	reg     *registry.Registry
 }
 
-func New(cfg config.Config, data store.EndpointsStorage) *Impl {
+func New(cfg config.Config, reg *registry.Registry) *Impl {
 	return &Impl{
 		version: cfg.AppInfo.Version,
-		data:    data,
+		reg:     reg,
 	}
 }
 

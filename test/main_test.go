@@ -14,7 +14,6 @@ import (
 	"google.golang.org/grpc/metadata"
 
 	"go.vervstack.ru/makosh/internal/app"
-	"go.vervstack.ru/makosh/internal/domain"
 	"go.vervstack.ru/makosh/internal/interceptors"
 	"go.vervstack.ru/makosh/pkg/makosh_be"
 )
@@ -50,7 +49,7 @@ func TestMain(m *testing.M) {
 var makoshClient makosh_be.MakoshBeAPIClient
 
 var (
-	examples = []domain.Endpoint{
+	examples = []*makosh_be.Endpoint{
 		{
 			ServiceName: testService1,
 			Addrs:       []string{createFakeBackend(firstServerResponse), createFakeBackend(firstServerResponse)},
@@ -87,14 +86,7 @@ func initEnv() {
 		return
 	}
 
-	upsertReq := &makosh_be.UpsertEndpoints_Request{}
-	for _, endpoint := range examples {
-		upsertReq.Endpoints = append(upsertReq.Endpoints,
-			&makosh_be.Endpoint{
-				ServiceName: endpoint.ServiceName,
-				Addrs:       endpoint.Addrs,
-			})
-	}
+	upsertReq := &makosh_be.UpsertEndpoints_Request{Endpoints: examples}
 
 	_, err = makoshClient.UpsertEndpoints(ctx, upsertReq)
 	if err != nil {

@@ -3,14 +3,12 @@ module go.vervstack.ru/makosh
 go 1.24.2
 
 require (
-	github.com/Red-Sock/go-swagger-ui v0.0.2
 	github.com/Red-Sock/trace-errors v0.0.13
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
 	github.com/rs/cors v1.11.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/soheilhy/cmux v0.1.5
 	github.com/stretchr/testify v1.10.0
-	go.redsock.ru/protoc-gen-npm v0.0.11
 	go.redsock.ru/rerrors v0.0.3
 	go.redsock.ru/toolbox v0.0.10
 	go.vervstack.ru/matreshka v1.0.66

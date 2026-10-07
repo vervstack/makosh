@@ -3,10 +3,8 @@ syntax = "proto3";
 package makosh_be_api;
 
 import "google/api/annotations.proto";
-import "npm.proto";
 
 option go_package = "/makosh_be";
-option (npm_package) = "@godverv/makosh";
 
 service MakoshBeAPI {
   rpc Version(Version.Request) returns (Version.Response) {
@@ -28,6 +26,24 @@ service MakoshBeAPI {
     };
   }
 
+  rpc DeleteEndpoints(DeleteEndpoints.Request) returns (DeleteEndpoints.Response) {
+    option (google.api.http) = {
+      post: "/api/endpoints/delete"
+      body: "*"
+    };
+  }
+}
+
+enum AddressScope {
+  ADDRESS_SCOPE_UNSPECIFIED = 0;
+  DOCKER = 1;
+  VCN = 2;
+}
+
+message Address {
+  string addr = 1;
+  AddressScope scope = 2;
+  string name = 3; // which exposed port/resource of the service this address reaches
 }
 
 message Version {
@@ -41,10 +57,12 @@ message Version {
 message ListEndpoints {
   message Request {
     string service_name = 1;
+    AddressScope scope = 2; // UNSPECIFIED = all scopes
   }
 
   message Response {
     repeated string urls = 1;
+    repeated Address addresses = 2;
   }
 }
 
@@ -52,6 +70,16 @@ message ListEndpoints {
 message Endpoint {
   string service_name = 1;
   repeated string addrs = 2;
+  repeated Address addresses = 3;
+}
+
+message DeleteEndpoints {
+  message Request {
+    string service_name = 1;
+    AddressScope scope = 2; // scope UNSPECIFIED removes the whole service
+  }
+
+  message Response {}
 }
 
 message UpsertEndpoints {
